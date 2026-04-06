@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>תשלום | אוקסנה פלאוורס</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Heebo:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --blush:      #F2D7D5;
+      --sage:       #B7C9B0;
+      --ivory:      #FAF7F2;
+      --dusty-rose: #D4A0A0;
+      --charcoal:   #3B3535;
+      --gold:       #C9A96E;
+      --white:      #FFFFFF;
+      --shadow-card:  0 2px 16px rgba(59,53,53,.08);
+      --shadow-hover: 0 8px 32px rgba(59,53,53,.15);
+      --radius-md:  12px;
+      --radius-lg:  24px;
+      --radius-pill:9999px;
+      --transition: 220ms ease;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Heebo', sans-serif; background: var(--ivory); color: var(--charcoal); font-size: 16px; line-height: 1.65; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; font-family: inherit; border: none; }
+    .container { max-width: 1140px; margin-inline: auto; padding-inline: 24px; }
+
+    /* Navbar */
+    .navbar { background: var(--white); box-shadow: 0 1px 8px rgba(59,53,53,.07); height: 68px; display: flex; align-items: center; }
+    .navbar .container { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+    .navbar-logo { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; color: var(--charcoal); }
+    .navbar-logo span { color: var(--dusty-rose); }
+    .back-link { display: flex; align-items: center; gap: 6px; font-size: 14px; color: #9e8e8e; transition: color var(--transition); }
+    .back-link:hover { color: var(--dusty-rose); }
+
+    /* Progress bar */
+    .checkout-progress { background: var(--white); border-bottom: 1px solid #ede4e0; padding-block: 18px; }
+    .progress-steps { display: flex; align-items: center; justify-content: center; gap: 0; max-width: 480px; margin-inline: auto; }
+    .progress-step { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; position: relative; }
+    .progress-step::after { content: ''; position: absolute; top: 14px; left: 50%; width: 100%; height: 2px; background: #e4d8d4; z-index: 0; }
+    .progress-step:last-child::after { display: none; }
+    .step-dot { width: 28px; height: 28px; border-radius: 50%; background: #e4d8d4; color: #9e8e8e; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1; transition: background var(--transition); }
+    .step-dot.active { background: var(--dusty-rose); color: var(--white); }
+    .step-dot.done { background: var(--sage); color: var(--white); }
+    .step-label { font-size: 12px; color: #9e8e8e; }
+    .step-label.active { color: var(--dusty-rose); font-weight: 600; }
+
+    /* Layout */
+    .checkout-layout { display: grid; grid-template-columns: 1fr 380px; gap: 32px; padding-block: 40px; align-items: start; }
+
+    /* Form card */
+    .form-card { background: var(--white); border-radius: var(--radius-lg); box-shadow: var(--shadow-card); overflow: hidden; }
+    .form-section { padding: 28px 32px; border-bottom: 1px solid #ede4e0; }
+    .form-section:last-child { border-bottom: none; }
+    .form-section-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; margin-bottom: 4px; display: flex; align-items: center; gap: 10px; }
+    .form-section-title .section-icon { font-size: 20px; }
+    .form-section-sub { font-size: 13px; color: #9e8e8e; margin-bottom: 22px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group:last-child { margin-bottom: 0; }
+    .form-label { display: flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 500; margin-bottom: 6px; }
+    .required-star { color: var(--dusty-rose); }
+    .form-input, .form-textarea, .form-select {
+      width: 100%; padding: 11px 14px;
+      border: 1.5px solid #e4d8d4; border-radius: 8px;
+      font-family: 'Heebo', sans-serif; font-size: 15px; color: var(--charcoal);
+      background: var(--white); transition: border-color var(--transition), box-shadow var(--transition);
+      appearance: none;
+    }
+    .form-input:focus, .form-textarea:focus, .form-select:focus {
+      outline: none; border-color: var(--dusty-rose);
+      box-shadow: 0 0 0 3px rgba(212,160,160,.15);
+    }
+    .form-input.error, .form-textarea.error { border-color: #e07070; }
+    .form-input:valid:not(:placeholder-shown) { border-color: var(--sage); }
+    .form-textarea { resize: vertical; min-height: 100px; }
+    .form-hint { font-size: 12px; color: #9e8e8e; margin-top: 5px; }
+    .error-msg { font-size: 12px; color: #e07070; margin-top: 5px; display: none; }
+    .char-counter { font-size: 12px; color: #9e8e8e; text-align: left; margin-top: 4px; }
+
+    /* Card message special styling */
+    .greeting-box { position: relative; }
+    .greeting-box::before { content: '💌'; position: absolute; top: 12px; left: 12px; font-size: 16px; pointer-events: none; }
+    .greeting-box .form-textarea { padding-right: 14px; padding-left: 36px; direction: rtl; }
+
+    /* Order summary panel */
+    .summary-card { background: var(--white); border-radius: var(--radius-lg); box-shadow: var(--shadow-card); position: sticky; top: 24px; overflow: hidden; }
+    .summary-header { background: linear-gradient(135deg, var(--blush) 0%, #eedbd8 100%); padding: 22px 24px; }
+    .summary-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; }
+    .summary-body { padding: 20px 24px; }
+    .summary-items { margin-bottom: 20px; }
+    .summary-item { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 12px; font-size: 14px; }
+    .summary-item-info { flex: 1; }
+    .summary-item-name { font-weight: 500; }
+    .summary-item-qty { color: #9e8e8e; font-size: 13px; }
+    .summary-item-price { color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 600; white-space: nowrap; }
+    .summary-divider { height: 1px; background: #ede4e0; margin-block: 16px; }
+    .summary-line { display: flex; justify-content: space-between; font-size: 15px; margin-bottom: 10px; }
+    .summary-line.total { font-weight: 600; font-size: 18px; margin-top: 12px; padding-top: 12px; border-top: 1.5px solid #ede4e0; }
+    .summary-line.total .amount { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--gold); }
+    .free-delivery { color: var(--sage); font-weight: 500; }
+    .place-order-btn {
+      width: 100%; padding: 16px; margin-top: 20px;
+      background: var(--dusty-rose); color: var(--white);
+      font-family: 'Heebo', sans-serif; font-size: 16px; font-weight: 500;
+      border-radius: var(--radius-pill); border: none; cursor: pointer;
+      transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .place-order-btn:hover { background: #c48888; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212,160,160,.35); }
+    .place-order-btn:active { transform: translateY(0); }
+    .place-order-btn.loading { opacity: .7; pointer-events: none; }
+    .secure-note { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 12px; color: #9e8e8e; margin-top: 12px; }
+
+    /* Empty cart warning */
+    .empty-warning { text-align: center; padding: 48px 24px; }
+    .empty-warning .icon { font-size: 48px; margin-bottom: 16px; }
+    .empty-warning h3 { font-family: 'Cormorant Garamond', serif; font-size: 24px; margin-bottom: 8px; }
+    .empty-warning p { color: #9e8e8e; margin-bottom: 24px; }
+    .btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--dusty-rose); color: var(--white); font-family: 'Heebo', sans-serif; font-size: 15px; font-weight: 500; padding: 12px 28px; border-radius: var(--radius-pill); transition: background var(--transition); }
+    .btn-primary:hover { background: #c48888; }
+
+    /* Success screen */
+    .success-screen {
+      display: none; position: fixed; inset: 0; background: var(--ivory);
+      z-index: 200; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 40px;
+    }
+    .success-screen.visible { display: flex; }
+    .success-icon { font-size: 80px; margin-bottom: 24px; animation: pop .4s ease; }
+    @keyframes pop { 0%{transform:scale(.5)} 70%{transform:scale(1.15)} 100%{transform:scale(1)} }
+    .success-title { font-family: 'Cormorant Garamond', serif; font-size: 42px; font-weight: 300; margin-bottom: 12px; }
+    .success-title em { font-style: italic; color: var(--dusty-rose); }
+    .success-sub { font-size: 16px; color: #6b5e5e; max-width: 400px; margin-bottom: 8px; }
+    .success-order-id { font-size: 14px; color: #9e8e8e; margin-bottom: 32px; }
+    .success-order-id span { font-weight: 600; color: var(--charcoal); }
+    .success-actions { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+
+    /* Footer */
+    footer { background: var(--charcoal); color: rgba(255,255,255,.75); padding-block: 32px; margin-top: 48px; }
+    .footer-simple { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; font-size: 13px; }
+    .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--white); }
+    .footer-logo span { color: var(--dusty-rose); }
+
+    @media (max-width: 1024px) { .checkout-layout { grid-template-columns: 1fr; } .summary-card { position: static; } }
+    @media (max-width: 640px) { .form-row { grid-template-columns: 1fr; } .checkout-layout { padding-block: 24px; } }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header>
+    <nav class="navbar">
+      <div class="container">
+        <a href="./index.html" class="navbar-logo">Oksana <span>Flowers</span></a>
+        <a href="./cart.html" class="back-link">
+          ← חזרה לעגלה
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Progress -->
+  <div class="checkout-progress">
+    <div class="progress-steps">
+      <div class="progress-step">
+        <div class="step-dot done">✓</div>
+        <span class="step-label">עגלה</span>
+      </div>
+      <div class="progress-step">
+        <div class="step-dot active">2</div>
+        <span class="step-label active">פרטי משלוח</span>
+      </div>
+      <div class="progress-step">
+        <div class="step-dot">3</div>
+        <span class="step-label">אישור</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty cart fallback -->
+  <div id="empty-warning" style="display:none;">
+    <div class="container" style="padding-block:80px;">
+      <div class="empty-warning">
+        <div class="icon">🛒</div>
+        <h3>העגלה שלך ריקה</h3>
+        <p>אין פריטים להזמנה. חזרו לחנות ובחרו זרים!</p>
+        <a href="./shop.html" class="btn-primary">לחנות ←</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Checkout layout -->
+  <main id="checkout-main">
+    <div class="container">
+      <div class="checkout-layout">
+
+        <!-- Form -->
+        <div class="form-card">
+
+          <!-- Section 1: Sender -->
+          <div class="form-section">
+            <h2 class="form-section-title"><span class="section-icon">👤</span> פרטי השולח</h2>
+            <p class="form-section-sub">פרטים ליצירת קשר ואישור ההזמנה</p>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="sender-name">שם השולח <span class="required-star">*</span></label>
+                <input class="form-input" type="text" id="sender-name" name="sender-name" placeholder="שם מלא" autocomplete="name" required />
+                <div class="error-msg" id="err-sender-name">נא להזין שם</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="phone">טלפון <span class="required-star">*</span></label>
+                <input class="form-input" type="tel" id="phone" name="phone" placeholder="050-000-0000" autocomplete="tel" required />
+                <div class="error-msg" id="err-phone">נא להזין מספר טלפון תקין</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 2: Recipient -->
+          <div class="form-section">
+            <h2 class="form-section-title"><span class="section-icon">🎁</span> פרטי המקבל</h2>
+            <p class="form-section-sub">לאן ולמי יגיע הזר?</p>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="recipient-name">שם המקבל <span class="required-star">*</span></label>
+                <input class="form-input" type="text" id="recipient-name" name="recipient-name" placeholder="שם מלא" required />
+                <div class="error-msg" id="err-recipient-name">נא להזין שם המקבל</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="delivery-date">תאריך משלוח <span class="required-star">*</span></label>
+                <input class="form-input" type="date" id="delivery-date" name="delivery-date" required />
+                <div class="error-msg" id="err-delivery-date">נא לבחור תאריך משלוח</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="delivery-address">כתובת למשלוח <span class="required-star">*</span></label>
+              <input class="form-input" type="text" id="delivery-address" name="delivery-address" placeholder="רחוב, מספר בית, עיר" autocomplete="street-address" required />
+              <div class="error-msg" id="err-delivery-address">נא להזין כתובת מלאה</div>
+              <p class="form-hint">משלוח חינם לנוף הגליל ב-350 ₪ ומעלה</p>
+            </div>
+          </div>
+
+          <!-- Section 3: Greeting Card -->
+          <div class="form-section">
+            <h2 class="form-section-title"><span class="section-icon">💌</span> כרטיס ברכה</h2>
+            <p class="form-section-sub">הודעה אישית שתצורף לזר — אופציונלי</p>
+            <div class="form-group">
+              <label class="form-label" for="greeting-message">טקסט הכרטיס</label>
+              <div class="greeting-box">
+                <textarea class="form-textarea" id="greeting-message" name="greeting-message"
+                  placeholder="לכתוב את ההודעה שלך כאן... למשל: 'יום הולדת שמח! את מדהימה 🌸'"
+                  maxlength="200" rows="4"></textarea>
+              </div>
+              <div class="char-counter"><span id="char-count">0</span>/200 תווים</div>
+              <p class="form-hint">הכרטיס יודפס ביד ויצורף לזר</p>
+            </div>
+          </div>
+
+          <!-- Section 4: Notes -->
+          <div class="form-section">
+            <h2 class="form-section-title"><span class="section-icon">📝</span> הערות נוספות</h2>
+            <div class="form-group">
+              <label class="form-label" for="notes">הערות להזמנה</label>
+              <textarea class="form-textarea" id="notes" name="notes"
+                placeholder="קומה, קוד כניסה, שעת מסירה מועדפת, העדפות צבע..." rows="3"></textarea>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Summary -->
+        <aside class="summary-card">
+          <div class="summary-header">
+            <h3 class="summary-title">סיכום הזמנה</h3>
+          </div>
+          <div class="summary-body">
+            <div class="summary-items" id="summary-items"></div>
+            <div class="summary-divider"></div>
+            <div class="summary-line">
+              <span>סכום ביניים</span>
+              <span id="s-subtotal">—</span>
+            </div>
+            <div class="summary-line">
+              <span>משלוח</span>
+              <span id="s-delivery">—</span>
+            </div>
+            <div class="summary-line total">
+              <span>סה"כ</span>
+              <span class="amount" id="s-total">—</span>
+            </div>
+            <button class="place-order-btn" id="place-order-btn" type="button">
+              <span id="btn-text">אישור הזמנה ✦</span>
+            </button>
+            <p class="secure-note">🔒 הזמנה מאובטחת ומוצפנת</p>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Success screen -->
+  <div class="success-screen" id="success-screen">
+    <div class="success-icon">🌸</div>
+    <h1 class="success-title">ההזמנה <em>התקבלה!</em></h1>
+    <p class="success-sub">תודה! קיבלנו את ההזמנה שלך ואוקסנה תתחיל לעבוד עליה בקרוב.</p>
+    <p class="success-order-id">מספר הזמנה: <span id="confirm-order-id">—</span></p>
+    <div class="success-actions">
+      <a href="./index.html" class="btn-primary">חזרה לדף הבית</a>
+      <a href="https://wa.me/972500000000" style="display:inline-flex;align-items:center;gap:8px;background:#25D366;color:#fff;font-family:Heebo,sans-serif;font-size:15px;font-weight:500;padding:12px 28px;border-radius:9999px;">💬 וואטסאפ לאישור</a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-simple">
+        <div class="footer-logo">Oksana <span>Flowers</span></div>
+        <span>© 2026 · מרכז רסקו, נוף הגליל 🌸</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ── Helpers ──────────────────────────────────────────────────────────────
+    const DELIVERY_THRESHOLD = 350;
+    const DELIVERY_FEE = 35;
+
+    function getCart() {
+      return JSON.parse(localStorage.getItem('oksana-cart') || '[]');
+    }
+    function getOrders() {
+      return JSON.parse(localStorage.getItem('orders') || '[]');
+    }
+    function saveOrders(orders) {
+      localStorage.setItem('orders', JSON.stringify(orders));
+    }
+    function generateOrderId() {
+      const ts = Date.now().toString(36).toUpperCase();
+      const rand = Math.random().toString(36).substr(2, 4).toUpperCase();
+      return `OF-${ts}-${rand}`;
+    }
+    function formatPrice(n) {
+      return n.toLocaleString('he-IL') + ' ₪';
+    }
+
+    // ── Cart rendering ────────────────────────────────────────────────────────
+    function calcTotals(cart) {
+      const subtotal = cart.reduce((s, i) => s + i.price * (i.qty || 1), 0);
+      const freeDelivery = subtotal >= DELIVERY_THRESHOLD;
+      const delivery = freeDelivery ? 0 : DELIVERY_FEE;
+      return { subtotal, delivery, total: subtotal + delivery, freeDelivery };
+    }
+
+    function renderSummary() {
+      const cart = getCart();
+      if (cart.length === 0) {
+        document.getElementById('empty-warning').style.display = 'block';
+        document.getElementById('checkout-main').style.display = 'none';
+        return;
+      }
+
+      const { subtotal, delivery, total, freeDelivery } = calcTotals(cart);
+      const itemsEl = document.getElementById('summary-items');
+      itemsEl.innerHTML = cart.map(item => `
+        <div class="summary-item">
+          <div class="summary-item-info">
+            <div class="summary-item-name">${item.name}</div>
+            <div class="summary-item-qty">× ${item.qty || 1}</div>
+          </div>
+          <span class="summary-item-price">${formatPrice(item.price * (item.qty || 1))}</span>
+        </div>
+      `).join('');
+
+      document.getElementById('s-subtotal').textContent = formatPrice(subtotal);
+      document.getElementById('s-delivery').innerHTML = freeDelivery
+        ? '<span class="free-delivery">חינם 🎉</span>'
+        : formatPrice(delivery);
+      document.getElementById('s-total').textContent = formatPrice(total);
+    }
+
+    // ── Char counter ─────────────────────────────────────────────────────────
+    const greetingArea = document.getElementById('greeting-message');
+    const charCount = document.getElementById('char-count');
+    greetingArea.addEventListener('input', () => {
+      charCount.textContent = greetingArea.value.length;
+    });
+
+    // ── Set min date to today ─────────────────────────────────────────────────
+    (function () {
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const dd = String(today.getDate()).padStart(2, '0');
+      document.getElementById('delivery-date').min = `${yyyy}-${mm}-${dd}`;
+    })();
+
+    // ── Validation ────────────────────────────────────────────────────────────
+    function showError(fieldId, errId) {
+      const field = document.getElementById(fieldId);
+      const err = document.getElementById(errId);
+      field.classList.add('error');
+      if (err) err.style.display = 'block';
+      return false;
+    }
+    function clearError(fieldId, errId) {
+      const field = document.getElementById(fieldId);
+      const err = document.getElementById(errId);
+      field.classList.remove('error');
+      if (err) err.style.display = 'none';
+    }
+
+    ['sender-name', 'phone', 'recipient-name', 'delivery-date', 'delivery-address'].forEach(id => {
+      const field = document.getElementById(id);
+      if (field) {
+        field.addEventListener('input', () => clearError(id, `err-${id}`));
+        field.addEventListener('change', () => clearError(id, `err-${id}`));
+      }
+    });
+
+    function validateForm() {
+      let valid = true;
+      const required = [
+        { id: 'sender-name',       errId: 'err-sender-name',       test: v => v.trim().length >= 2 },
+        { id: 'phone',             errId: 'err-phone',             test: v => /^[\d\-\+\s]{9,15}$/.test(v.trim()) },
+        { id: 'recipient-name',    errId: 'err-recipient-name',    test: v => v.trim().length >= 2 },
+        { id: 'delivery-date',     errId: 'err-delivery-date',     test: v => v.length > 0 },
+        { id: 'delivery-address',  errId: 'err-delivery-address',  test: v => v.trim().length >= 5 },
+      ];
+      required.forEach(({ id, errId, test }) => {
+        const val = document.getElementById(id).value;
+        if (!test(val)) {
+          showError(id, errId);
+          valid = false;
+        } else {
+          clearError(id, errId);
+        }
+      });
+      return valid;
+    }
+
+    // ── Place order ───────────────────────────────────────────────────────────
+    document.getElementById('place-order-btn').addEventListener('click', function () {
+      if (!validateForm()) {
+        // Scroll to first error
+        const firstError = document.querySelector('.form-input.error, .form-textarea.error');
+        if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+
+      const cart = getCart();
+      const { subtotal, delivery, total } = calcTotals(cart);
+      const orderId = generateOrderId();
+
+      const order = {
+        id:              orderId,
+        timestamp:       new Date().toISOString(),
+        status:          'new',                             // new | preparing | out-for-delivery | completed
+        items:           cart,
+        subtotal:        subtotal,
+        deliveryFee:     delivery,
+        total:           total,
+        senderName:      document.getElementById('sender-name').value.trim(),
+        phone:           document.getElementById('phone').value.trim(),
+        recipientName:   document.getElementById('recipient-name').value.trim(),
+        deliveryAddress: document.getElementById('delivery-address').value.trim(),
+        deliveryDate:    document.getElementById('delivery-date').value,
+        greetingMessage: document.getElementById('greeting-message').value.trim(),
+        notes:           document.getElementById('notes').value.trim(),
+      };
+
+      // Save to orders array
+      const orders = getOrders();
+      orders.unshift(order);   // newest first
+      saveOrders(orders);
+
+      // Clear cart
+      localStorage.removeItem('oksana-cart');
+
+      // Show success
+      document.getElementById('confirm-order-id').textContent = orderId;
+      document.getElementById('success-screen').classList.add('visible');
+      window.scrollTo({ top: 0 });
+    });
+
+    // ── Init ──────────────────────────────────────────────────────────────────
+    renderSummary();
+  </script>
+</body>
+</html>

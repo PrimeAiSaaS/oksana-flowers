@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>זרי כלה | אוקסנה פלאוורס</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Heebo:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --blush:#F2D7D5; --sage:#B7C9B0; --ivory:#FAF7F2;
+      --dusty-rose:#D4A0A0; --charcoal:#3B3535; --gold:#C9A96E; --white:#FFFFFF;
+      --shadow-card:0 2px 16px rgba(59,53,53,.08); --shadow-hover:0 8px 32px rgba(59,53,53,.15);
+      --radius-md:12px; --radius-lg:24px; --radius-pill:9999px; --transition:220ms ease;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Heebo',sans-serif;background:var(--ivory);color:var(--charcoal);font-size:16px;line-height:1.65;}
+    a{text-decoration:none;color:inherit;}
+    button{cursor:pointer;font-family:inherit;border:none;}
+    .container{max-width:1240px;margin-inline:auto;padding-inline:24px;}
+    .btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--dusty-rose);color:var(--white);font-family:'Heebo',sans-serif;font-size:15px;font-weight:500;padding:13px 32px;border-radius:var(--radius-pill);transition:background var(--transition),transform var(--transition);}
+    .btn-primary:hover{background:#c48888;transform:translateY(-2px);}
+    .btn-outline{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--white);font-family:'Heebo',sans-serif;font-size:15px;font-weight:500;padding:12px 30px;border-radius:var(--radius-pill);border:1.5px solid rgba(255,255,255,.6);transition:background var(--transition);}
+    .btn-outline:hover{background:rgba(255,255,255,.15);}
+
+    /* Navbar */
+    .navbar{position:sticky;top:0;z-index:100;background:var(--white);box-shadow:0 1px 8px rgba(59,53,53,.07);height:68px;display:flex;align-items:center;}
+    .navbar .container{display:flex;align-items:center;justify-content:space-between;width:100%;}
+    .navbar-logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:var(--charcoal);}
+    .navbar-logo span{color:var(--dusty-rose);}
+    .navbar-nav{display:flex;align-items:center;gap:32px;list-style:none;}
+    .navbar-nav a{font-size:14px;color:var(--charcoal);transition:color var(--transition);}
+    .navbar-nav a:hover,.navbar-nav a.active{color:var(--dusty-rose);}
+    .cart-btn{position:relative;background:none;padding:6px;border-radius:50%;border:none;cursor:pointer;transition:background var(--transition);}
+    .cart-btn:hover{background:var(--blush);}
+    .cart-btn svg{width:22px;height:22px;stroke:var(--charcoal);fill:none;stroke-width:1.5;}
+    .cart-badge{position:absolute;top:-2px;left:-2px;background:var(--dusty-rose);color:var(--white);font-size:10px;font-weight:600;width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+
+    /* Bridal Hero */
+    .bridal-hero{min-height:500px;display:flex;align-items:center;position:relative;overflow:hidden;background:linear-gradient(135deg,#f5e8e6 0%,#eedbd8 40%,#e8e0ee 100%);}
+    .bridal-hero::before{content:'👰';position:absolute;font-size:240px;opacity:.06;left:-20px;top:50%;transform:translateY(-50%);}
+    .bridal-hero::after{content:'💍';position:absolute;font-size:180px;opacity:.05;right:60px;bottom:-30px;}
+    .bridal-hero-content{position:relative;z-index:1;padding-block:80px;max-width:580px;}
+    .bridal-eyebrow{font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--dusty-rose);margin-bottom:14px;}
+    .bridal-title{font-family:'Cormorant Garamond',serif;font-size:clamp(38px,5vw,60px);font-weight:300;line-height:1.15;color:var(--charcoal);margin-bottom:18px;}
+    .bridal-title em{font-style:italic;color:#9e6e6e;}
+    .bridal-sub{font-size:16px;color:#6b5e5e;margin-bottom:32px;max-width:400px;line-height:1.7;}
+    .bridal-cta{display:flex;gap:14px;flex-wrap:wrap;}
+
+    /* Consultation Strip */
+    .consultation-strip{background:var(--charcoal);color:var(--white);padding:20px 0;}
+    .consultation-strip .container{display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap;}
+    .consultation-strip p{font-size:15px;opacity:.85;}
+    .consultation-strip a{display:inline-flex;align-items:center;gap:8px;background:var(--dusty-rose);color:var(--white);font-family:'Heebo',sans-serif;font-size:14px;font-weight:500;padding:9px 22px;border-radius:var(--radius-pill);transition:background var(--transition);}
+    .consultation-strip a:hover{background:#c48888;}
+
+    /* Products */
+    .section-products{padding-block:72px;}
+    .section-title{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:400;color:var(--charcoal);text-align:center;margin-bottom:8px;}
+    .section-title::after{content:'';display:block;width:48px;height:1px;background:var(--sage);margin:12px auto 0;}
+    .section-subtitle{text-align:center;color:#7a6f6f;font-size:15px;margin-bottom:48px;}
+    .products-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+    .product-card{background:var(--white);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-card);transition:transform var(--transition),box-shadow var(--transition);}
+    .product-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-hover);}
+    .product-img{aspect-ratio:4/5;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+    .pi1{background:linear-gradient(160deg,#f7eeee,#ead8d8,#ddc5c5);}
+    .pi2{background:linear-gradient(160deg,#f0e8f0,#e4d4e8,#d8c0dc);}
+    .pi3{background:linear-gradient(160deg,#f5f0e8,#ede4d4,#e5d8c0);}
+    .pi4{background:linear-gradient(160deg,#eef5ee,#dcecdc,#cae0ca);}
+    .pi5{background:linear-gradient(160deg,#f8f0e8,#f0e4d4,#e8d8c0);}
+    .pi6{background:linear-gradient(160deg,#f8eef0,#f0dde0,#e8ccd0);}
+    .product-img-icon{font-size:64px;opacity:.45;}
+    .product-tag{position:absolute;top:12px;right:12px;background:var(--dusty-rose);color:var(--white);font-size:11px;font-weight:600;padding:3px 10px;border-radius:var(--radius-pill);}
+    .product-tag.premium{background:var(--gold);color:var(--charcoal);}
+    .product-body{padding:18px 20px 22px;}
+    .product-name{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:500;margin-bottom:6px;line-height:1.3;}
+    .product-desc{font-size:13px;color:#9e8e8e;margin-bottom:14px;line-height:1.5;}
+    .product-footer{display:flex;align-items:center;justify-content:space-between;}
+    .product-price{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--gold);}
+    .add-to-cart-btn{background:var(--dusty-rose);color:var(--white);font-family:'Heebo',sans-serif;font-size:13px;font-weight:500;padding:8px 18px;border-radius:var(--radius-pill);transition:background var(--transition);}
+    .add-to-cart-btn:hover{background:#c48888;}
+
+    /* Process */
+    .section-process{padding-block:72px;background:var(--white);}
+    .process-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:48px;}
+    .step{text-align:center;padding:28px 20px;}
+    .step-number{font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:300;color:var(--blush);line-height:1;margin-bottom:12px;}
+    .step-icon{font-size:32px;margin-bottom:12px;}
+    .step-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;margin-bottom:8px;}
+    .step-text{font-size:14px;color:#7a6f6f;line-height:1.6;}
+
+    /* Bottom CTA Strip */
+    .section-cta{padding-block:64px;background:linear-gradient(135deg,var(--blush) 0%,#eedbd8 50%,#e8e0ee 100%);text-align:center;}
+    .cta-title{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:300;margin-bottom:16px;}
+    .cta-title em{font-style:italic;color:#9e6e6e;}
+    .cta-text{font-size:16px;color:#6b5e5e;margin-bottom:32px;}
+
+    /* Footer */
+    footer{background:var(--charcoal);color:rgba(255,255,255,.75);padding-block:48px 24px;}
+    .footer-simple{display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center;}
+    .footer-logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--white);}
+    .footer-logo span{color:var(--dusty-rose);}
+    .footer-nav{display:flex;gap:28px;list-style:none;flex-wrap:wrap;justify-content:center;}
+    .footer-nav a{font-size:13px;color:rgba(255,255,255,.65);transition:color var(--transition);}
+    .footer-nav a:hover{color:var(--dusty-rose);}
+    .footer-copy{font-size:12px;color:rgba(255,255,255,.4);border-top:1px solid rgba(255,255,255,.08);padding-top:20px;width:100%;text-align:center;}
+    .whatsapp-btn{display:inline-flex;align-items:center;gap:8px;background:#25D366;color:var(--white);font-family:'Heebo',sans-serif;font-size:14px;font-weight:500;padding:10px 22px;border-radius:var(--radius-pill);}
+
+    @media(max-width:1024px){.products-grid{grid-template-columns:repeat(2,1fr);}.process-steps{grid-template-columns:repeat(2,1fr);}}
+    @media(max-width:768px){.navbar-nav{display:none;}.products-grid{grid-template-columns:1fr;}.process-steps{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav class="navbar">
+      <div class="container">
+        <a href="./index.html" class="navbar-logo">Oksana <span>Flowers</span></a>
+        <ul class="navbar-nav">
+          <li><a href="./index.html">ראשי</a></li>
+          <li><a href="./shop.html">חנות</a></li>
+          <li><a href="./bridal.html" class="active">זרי כלה</a></li>
+          <li><a href="./about.html">אודות</a></li>
+          <li><a href="./contact.html">צור קשר</a></li>
+        </ul>
+        <div style="display:flex;align-items:center;gap:16px;">
+          <a href="./cart.html" class="cart-btn" aria-label="עגלת קניות">
+            <svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            <span class="cart-badge">0</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Bridal Hero -->
+  <section class="bridal-hero">
+    <div class="container">
+      <div class="bridal-hero-content">
+        <p class="bridal-eyebrow">✦ קולקציית כלות ✦</p>
+        <h1 class="bridal-title">הזר שיספר<br>את <em>הסיפור שלך</em></h1>
+        <p class="bridal-sub">כל כלה היא ייחודית. לכן כל זר שלנו מעוצב אישית — בייעוץ חינם, מחומרים הנבחרים ביום החתונה.</p>
+        <div class="bridal-cta">
+          <a href="./contact.html" class="btn-primary">ייעוץ חינם</a>
+          <a href="#products" class="btn-outline" style="color:var(--charcoal);border-color:var(--charcoal);">לקולקציה</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Consultation Strip -->
+  <div class="consultation-strip">
+    <div class="container">
+      <p>✦ כל כלה מקבלת ייעוץ אישי חינם — בסטודיו או בזום ✦</p>
+      <a href="https://wa.me/972500000000">💬 קבעי פגישה בוואטסאפ</a>
+    </div>
+  </div>
+
+  <!-- Products -->
+  <section class="section-products" id="products">
+    <div class="container">
+      <h2 class="section-title">קולקציית זרי הכלה</h2>
+      <p class="section-subtitle">6 סגנונות | כל אחד מעוצב אישית לפי בקשתכם | 350–770 ₪</p>
+      <div class="products-grid">
+
+        <div class="product-card">
+          <div class="product-img pi1">
+            <span class="product-img-icon">🤍</span>
+            <span class="product-tag">קלאסי</span>
+          </div>
+          <div class="product-body">
+            <h3 class="product-name">זר כלה קלאסי</h3>
+            <p class="product-desc">ורדים לבנים, פיוניות ועלי רוסקוס — אלגנטי ונצחי</p>
+            <div class="product-footer">
+              <span class="product-price">620 ₪</span>
+              <button class="add-to-cart-btn" data-id="b1" data-name="זר כלה קלאסי" data-price="620">הוסף לסל</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="product-img pi2">
+            <span class="product-img-icon">🌸</span>
+            <span class="product-tag premium">פרימיום</span>
+          </div>
+          <div class="product-body">
+            <h3 class="product-name">זר כלה בוטני</h3>
+            <p class="product-desc">גרינרי, פרחי בר ואורכידאות — ייחודי ומרגש</p>
+            <div class="product-footer">
+              <span class="product-price">770 ₪</span>
+              <button class="add-to-cart-btn" data-id="b2" data-name="זר כלה בוטני" data-price="770">הוסף לסל</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="product-img pi3">
+            <span class="product-img-icon">🌼</span>
+          </div>
+          <div class="product-body">
+            <h3 class="product-name">זר כלה שדה</h3>
+            <p class="product-desc">פרחי בר קלילים, ריח טרי ומראה רומנטי טבעי</p>
+            <div class="product-footer">
+              <span class="product-price">480 ₪</span>
+              <button class="add-to-cart-btn" data-id="b3" data-name="זר כלה שדה" data-price="480">הוסף לסל</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="product-img pi4">
+            <span class="product-img-icon">🌿</span>
+          </div>
+          <div class="product-body">
+            <h3 class="product-name">זר כלה מינימליסטי</h3>
+            <p class="product-desc">עיצוב נקי עם ירק מרהיב ופרחים בודדים מובחרים</p>
+            <div class="product-footer">
+              <span class="product-price">420 ₪</span>
+              <button class="add-to-cart-btn" data-id="b4" data-name="זר כלה מינימליסטי" data-price="420">הוסף לסל</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="product-img pi5">
+            <span class="product-img-icon">🌷</span>
+          </div>
+          <div class="product-body">
+            <h3 class="product-name">זר כלה פסטל</h3>
+            <p class="product-desc">גוונים עדינים של ורוד ולילך — נשי ועדין</p>
+            <div class="product-footer">
+              <span class="product-price">520 ₪</span>
+              <button class="add-to-cart-btn" data-id="b5" data-name="זר כלה פסטל" data-price="520">הוסף לסל</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="product-img pi6">
+            <span class="product-img-icon">🌹</span>
+            <span class="product-tag">חדש</span>
+          </div>
+          <div class="product-body">
+            <h3 class="product-name">זר כלה מודרני</h3>
+            <p class="product-desc">עיצוב עכשווי עם פרחים יוקרתיים בגוונים נועזים</p>
+            <div class="product-footer">
+              <span class="product-price">650 ₪</span>
+              <button class="add-to-cart-btn" data-id="b6" data-name="זר כלה מודרני" data-price="650">הוסף לסל</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Process -->
+  <section class="section-process">
+    <div class="container">
+      <h2 class="section-title">איך זה עובד?</h2>
+      <p class="section-subtitle" style="margin-bottom:0;">מהחלום ועד ליום החתונה — אנחנו כאן בכל שלב</p>
+      <div class="process-steps">
+        <div class="step">
+          <div class="step-number">01</div>
+          <div class="step-icon">💬</div>
+          <h3 class="step-title">ייעוץ אישי</h3>
+          <p class="step-text">נפגש בסטודיו או בזום ונדבר על החזון שלכם, הסגנון והצבעים</p>
+        </div>
+        <div class="step">
+          <div class="step-number">02</div>
+          <div class="step-icon">✏️</div>
+          <h3 class="step-title">הצעה ועיצוב</h3>
+          <p class="step-text">נכין עבורכם מצגת עיצוב עם הצעות מחיר ורפרנסים ויזואליים</p>
+        </div>
+        <div class="step">
+          <div class="step-number">03</div>
+          <div class="step-icon">🌺</div>
+          <h3 class="step-title">בחירת פרחים</h3>
+          <p class="step-text">ביום החתונה נגיע לשוק ונבחר רק את הטריים והמרהיבים ביותר</p>
+        </div>
+        <div class="step">
+          <div class="step-number">04</div>
+          <div class="step-icon">🚗</div>
+          <h3 class="step-title">משלוח לחופה</h3>
+          <p class="step-text">מגיעים אליכם עד שעה לפני הטקס — טריים, מרהיבים ומוכנים</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section-cta">
+    <div class="container">
+      <h2 class="cta-title">מוכנה לתאם<br>את <em>הזר שלך?</em></h2>
+      <p class="cta-text">ייעוץ ראשון חינם וללא התחייבות — בואי נבנה יחד את הרגע הכי יפה ביום הכי חשוב.</p>
+      <a href="./contact.html" class="btn-primary">צרי קשר עכשיו</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-simple">
+        <div class="footer-logo">Oksana <span>Flowers</span></div>
+        <ul class="footer-nav">
+          <li><a href="./index.html">ראשי</a></li>
+          <li><a href="./shop.html">חנות</a></li>
+          <li><a href="./bridal.html">זרי כלה</a></li>
+          <li><a href="./about.html">אודות</a></li>
+          <li><a href="./contact.html">צור קשר</a></li>
+        </ul>
+        <a href="https://wa.me/972500000000" class="whatsapp-btn">💬 הזמנה בוואטסאפ</a>
+        <div class="footer-copy">© 2026 Oksana Flowers · מרכז רסקו, נוף הגליל</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function updateCartBadge(){const cart=JSON.parse(localStorage.getItem('oksana-cart')||'[]');const count=cart.reduce((s,i)=>s+(i.qty||1),0);document.querySelector('.cart-badge').textContent=count;}
+    document.querySelectorAll('.add-to-cart-btn').forEach(btn=>{btn.addEventListener('click',()=>{const cart=JSON.parse(localStorage.getItem('oksana-cart')||'[]');const p={id:btn.dataset.id,name:btn.dataset.name,price:+btn.dataset.price};const ex=cart.find(i=>i.id===p.id);if(ex)ex.qty=(ex.qty||1)+1;else cart.push({...p,qty:1});localStorage.setItem('oksana-cart',JSON.stringify(cart));updateCartBadge();btn.textContent='✓ נוסף!';btn.style.background='#7ab87a';setTimeout(()=>{btn.textContent='הוסף לסל';btn.style.background='';},1600);});});
+    updateCartBadge();
+  </script>
+</body>
+</html>

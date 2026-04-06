@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>צור קשר | אוקסנה פלאוורס</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Heebo:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root{--blush:#F2D7D5;--sage:#B7C9B0;--ivory:#FAF7F2;--dusty-rose:#D4A0A0;--charcoal:#3B3535;--gold:#C9A96E;--white:#FFFFFF;--shadow-card:0 2px 16px rgba(59,53,53,.08);--shadow-hover:0 8px 32px rgba(59,53,53,.15);--radius-md:12px;--radius-lg:24px;--radius-pill:9999px;--transition:220ms ease;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Heebo',sans-serif;background:var(--ivory);color:var(--charcoal);font-size:16px;line-height:1.65;}
+    a{text-decoration:none;color:inherit;}
+    button{cursor:pointer;font-family:inherit;border:none;}
+    .container{max-width:1240px;margin-inline:auto;padding-inline:24px;}
+    .btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--dusty-rose);color:var(--white);font-family:'Heebo',sans-serif;font-size:15px;font-weight:500;padding:13px 32px;border-radius:var(--radius-pill);transition:background var(--transition),transform var(--transition);}
+    .btn-primary:hover{background:#c48888;transform:translateY(-2px);}
+
+    /* Navbar */
+    .navbar{position:sticky;top:0;z-index:100;background:var(--white);box-shadow:0 1px 8px rgba(59,53,53,.07);height:68px;display:flex;align-items:center;}
+    .navbar .container{display:flex;align-items:center;justify-content:space-between;width:100%;}
+    .navbar-logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:var(--charcoal);}
+    .navbar-logo span{color:var(--dusty-rose);}
+    .navbar-nav{display:flex;align-items:center;gap:32px;list-style:none;}
+    .navbar-nav a{font-size:14px;color:var(--charcoal);transition:color var(--transition);}
+    .navbar-nav a:hover,.navbar-nav a.active{color:var(--dusty-rose);}
+    .cart-btn{position:relative;background:none;padding:6px;border-radius:50%;border:none;cursor:pointer;transition:background var(--transition);}
+    .cart-btn:hover{background:var(--blush);}
+    .cart-btn svg{width:22px;height:22px;stroke:var(--charcoal);fill:none;stroke-width:1.5;}
+    .cart-badge{position:absolute;top:-2px;left:-2px;background:var(--dusty-rose);color:var(--white);font-size:10px;font-weight:600;width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+
+    /* Page Hero */
+    .page-hero{background:linear-gradient(135deg,#f0dbd8 0%,#e8d5d0 60%,#d9e8d5 100%);padding-block:56px;text-align:center;position:relative;overflow:hidden;}
+    .page-hero::before{content:'📍';font-size:180px;opacity:.05;position:absolute;left:5%;top:50%;transform:translateY(-50%);}
+    .page-hero-eyebrow{font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--dusty-rose);margin-bottom:14px;}
+    .page-hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(34px,5vw,52px);font-weight:300;color:var(--charcoal);}
+    .page-hero-title em{font-style:italic;color:#9e6e6e;}
+
+    /* Contact layout */
+    .section-contact{padding-block:72px;}
+    .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;}
+
+    /* Form */
+    .contact-form-card{background:var(--white);border-radius:var(--radius-lg);padding:40px 36px;box-shadow:var(--shadow-card);}
+    .form-title{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:400;margin-bottom:6px;}
+    .form-subtitle{font-size:14px;color:#9e8e8e;margin-bottom:28px;}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    .form-group{margin-bottom:18px;}
+    .form-label{display:block;font-size:14px;font-weight:500;margin-bottom:6px;color:var(--charcoal);}
+    .form-input,.form-textarea,.form-select{
+      width:100%;padding:12px 16px;border:1.5px solid #e4d8d4;
+      border-radius:8px;font-family:'Heebo',sans-serif;font-size:15px;
+      color:var(--charcoal);background:var(--white);
+      transition:border-color var(--transition);
+      appearance:none;
+    }
+    .form-input:focus,.form-textarea:focus,.form-select:focus{outline:none;border-color:var(--dusty-rose);}
+    .form-textarea{resize:vertical;min-height:120px;}
+    .form-submit{width:100%;padding:14px;background:var(--dusty-rose);color:var(--white);font-family:'Heebo',sans-serif;font-size:16px;font-weight:500;border-radius:var(--radius-pill);border:none;cursor:pointer;transition:background var(--transition),transform var(--transition);}
+    .form-submit:hover{background:#c48888;transform:translateY(-2px);}
+    .whatsapp-option{display:flex;align-items:center;gap:12px;margin-top:16px;padding:14px 16px;background:#e8faf0;border-radius:10px;border:1.5px solid #a8e4c0;}
+    .whatsapp-option-text{font-size:14px;color:#2d6e4e;flex:1;}
+    .whatsapp-link{display:inline-flex;align-items:center;gap:6px;background:#25D366;color:var(--white);font-family:'Heebo',sans-serif;font-size:13px;font-weight:500;padding:8px 18px;border-radius:var(--radius-pill);white-space:nowrap;}
+    .success-msg{display:none;background:#e8f5e9;border:1.5px solid #a5d6a7;border-radius:10px;padding:16px;text-align:center;color:#2e7d32;font-size:15px;margin-top:16px;}
+
+    /* Info panel */
+    .contact-info{display:flex;flex-direction:column;gap:20px;}
+    .info-card{background:var(--white);border-radius:var(--radius-md);padding:28px 24px;box-shadow:var(--shadow-card);}
+    .info-card-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;margin-bottom:16px;}
+    .info-item{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px;}
+    .info-item:last-child{margin-bottom:0;}
+    .info-icon{font-size:20px;flex-shrink:0;}
+    .info-label{font-weight:600;font-size:14px;margin-bottom:2px;}
+    .info-value{font-size:14px;color:#6b5e5e;line-height:1.5;}
+    .hours-table{width:100%;font-size:14px;border-collapse:collapse;}
+    .hours-table td{padding:4px 0;color:#6b5e5e;}
+    .hours-table td:first-child{font-weight:500;color:var(--charcoal);width:140px;}
+    .hours-table .closed{color:#c48888;}
+
+    /* Map */
+    .map-section{margin-top:20px;}
+    .map-card{background:var(--white);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-card);}
+    .map-embed{width:100%;height:320px;border:none;display:block;}
+    .map-link{display:block;text-align:center;padding:14px;font-size:14px;color:var(--dusty-rose);font-weight:500;border-top:1px solid #ede4e0;transition:background var(--transition);}
+    .map-link:hover{background:var(--blush);}
+
+    /* Footer */
+    footer{background:var(--charcoal);color:rgba(255,255,255,.75);padding-block:48px 24px;margin-top:0;}
+    .footer-simple{display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center;}
+    .footer-logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--white);}
+    .footer-logo span{color:var(--dusty-rose);}
+    .footer-nav{display:flex;gap:28px;list-style:none;flex-wrap:wrap;justify-content:center;}
+    .footer-nav a{font-size:13px;color:rgba(255,255,255,.65);transition:color var(--transition);}
+    .footer-nav a:hover{color:var(--dusty-rose);}
+    .footer-copy{font-size:12px;color:rgba(255,255,255,.4);border-top:1px solid rgba(255,255,255,.08);padding-top:20px;width:100%;text-align:center;}
+    .wa-btn{display:inline-flex;align-items:center;gap:8px;background:#25D366;color:var(--white);font-family:'Heebo',sans-serif;font-size:14px;font-weight:500;padding:10px 22px;border-radius:var(--radius-pill);}
+
+    @media(max-width:1024px){.contact-grid{grid-template-columns:1fr;}}
+    @media(max-width:768px){.navbar-nav{display:none;}.form-row{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav class="navbar">
+      <div class="container">
+        <a href="./index.html" class="navbar-logo">Oksana <span>Flowers</span></a>
+        <ul class="navbar-nav">
+          <li><a href="./index.html">ראשי</a></li>
+          <li><a href="./shop.html">חנות</a></li>
+          <li><a href="./bridal.html">זרי כלה</a></li>
+          <li><a href="./about.html">אודות</a></li>
+          <li><a href="./contact.html" class="active">צור קשר</a></li>
+        </ul>
+        <div style="display:flex;align-items:center;gap:16px;">
+          <a href="./cart.html" class="cart-btn" aria-label="עגלת קניות">
+            <svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            <span class="cart-badge">0</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <section class="page-hero">
+    <div class="container">
+      <p class="page-hero-eyebrow">✦ נשמח לשמוע ✦</p>
+      <h1 class="page-hero-title">צרו <em>קשר</em> איתנו</h1>
+    </div>
+  </section>
+
+  <section class="section-contact">
+    <div class="container">
+      <div class="contact-grid">
+
+        <!-- Form -->
+        <div class="contact-form-card">
+          <h2 class="form-title">שלחו לנו הודעה</h2>
+          <p class="form-subtitle">נחזור אליכם תוך 24 שעות — לרוב הרבה יותר מהר 🌸</p>
+          <form id="contact-form" novalidate>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="name">שם מלא *</label>
+                <input class="form-input" type="text" id="name" name="name" placeholder="שם ושם משפחה" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="phone">טלפון *</label>
+                <input class="form-input" type="tel" id="phone" name="phone" placeholder="050-000-0000" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="email">אימייל</label>
+              <input class="form-input" type="email" id="email" name="email" placeholder="your@email.com" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="subject">נושא</label>
+              <select class="form-select" id="subject" name="subject">
+                <option value="">בחרו נושא...</option>
+                <option value="bridal">זר כלה / ייעוץ חתונה</option>
+                <option value="bouquet">הזמנת זר</option>
+                <option value="car">קישוטי מכוניות</option>
+                <option value="gift">מארז מתנה</option>
+                <option value="other">אחר</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="message">הודעה *</label>
+              <textarea class="form-textarea" id="message" name="message" placeholder="ספרו לנו על האירוע, התאריך, הסגנון שאתם מחפשים..." required></textarea>
+            </div>
+            <button type="submit" class="form-submit">שליחת הודעה ✦</button>
+            <div class="success-msg" id="success-msg">
+              תודה! קיבלנו את ההודעה שלכם 🌸<br>נחזור אליכם בהקדם.
+            </div>
+          </form>
+          <div class="whatsapp-option">
+            <span class="whatsapp-option-text">מעדיפים לדבר ישירות? וואטסאפ הוא הדרך המהירה ביותר!</span>
+            <a href="https://wa.me/972500000000" class="whatsapp-link">💬 וואטסאפ</a>
+          </div>
+        </div>
+
+        <!-- Info -->
+        <div class="contact-info">
+          <div class="info-card">
+            <h3 class="info-card-title">פרטי התקשרות</h3>
+            <div class="info-item">
+              <span class="info-icon">📍</span>
+              <div>
+                <div class="info-label">כתובת</div>
+                <div class="info-value">מרכז רסקו, נוף הגליל<br>(נצרת עילית), הצפון</div>
+              </div>
+            </div>
+            <div class="info-item">
+              <span class="info-icon">📞</span>
+              <div>
+                <div class="info-label">טלפון</div>
+                <div class="info-value"><a href="tel:+972500000000" style="color:var(--dusty-rose);">050-XXX-XXXX</a></div>
+              </div>
+            </div>
+            <div class="info-item">
+              <span class="info-icon">💬</span>
+              <div>
+                <div class="info-label">וואטסאפ</div>
+                <div class="info-value"><a href="https://wa.me/972500000000" style="color:#25D366;">050-XXX-XXXX</a></div>
+              </div>
+            </div>
+            <div class="info-item">
+              <span class="info-icon">📧</span>
+              <div>
+                <div class="info-label">אימייל</div>
+                <div class="info-value">hello@oksanaflowers.co.il</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-card">
+            <h3 class="info-card-title">שעות פעילות</h3>
+            <table class="hours-table">
+              <tr><td>ראשון – חמישי</td><td>09:00 – 19:00</td></tr>
+              <tr><td>שישי</td><td>09:00 – 14:00</td></tr>
+              <tr><td>שבת</td><td class="closed">סגור</td></tr>
+            </table>
+            <p style="font-size:13px;color:#9e8e8e;margin-top:14px;">* להזמנות דחופות ניתן לפנות בוואטסאפ גם מחוץ לשעות הפעילות</p>
+          </div>
+
+          <div class="map-card map-section">
+            <!-- Google Maps embed — replace YOUR_API_KEY with real key -->
+            <iframe
+              class="map-embed"
+              loading="lazy"
+              allowfullscreen
+              referrerpolicy="no-referrer-when-downgrade"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3393.5!2d35.3!3d32.7!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sNof+HaGalil%2C+Israel!5e0!3m2!1siw!2sil!4v1680000000000!5m2!1siw!2sil"
+              title="מפה - מרכז רסקו, נוף הגליל"
+              aria-label="מפה של מרכז רסקו בנוף הגליל">
+            </iframe>
+            <a href="https://maps.google.com/?q=Nof+HaGalil+Israel" target="_blank" rel="noopener" class="map-link">
+              פתחו ב-Google Maps ↗
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-simple">
+        <div class="footer-logo">Oksana <span>Flowers</span></div>
+        <ul class="footer-nav">
+          <li><a href="./index.html">ראשי</a></li>
+          <li><a href="./shop.html">חנות</a></li>
+          <li><a href="./bridal.html">זרי כלה</a></li>
+          <li><a href="./about.html">אודות</a></li>
+          <li><a href="./contact.html">צור קשר</a></li>
+        </ul>
+        <a href="https://wa.me/972500000000" class="wa-btn">💬 הזמנה בוואטסאפ</a>
+        <div class="footer-copy">© 2026 Oksana Flowers · מרכז רסקו, נוף הגליל</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function updateCartBadge(){const cart=JSON.parse(localStorage.getItem('oksana-cart')||'[]');const count=cart.reduce((s,i)=>s+(i.qty||1),0);document.querySelector('.cart-badge').textContent=count;}
+    document.getElementById('contact-form').addEventListener('submit',function(e){
+      e.preventDefault();
+      const name=document.getElementById('name').value.trim();
+      const phone=document.getElementById('phone').value.trim();
+      const msg=document.getElementById('message').value.trim();
+      if(!name||!phone||!msg){alert('נא למלא את השדות המסומנים *');return;}
+      document.getElementById('success-msg').style.display='block';
+      this.reset();
+      setTimeout(()=>{document.getElementById('success-msg').style.display='none';},5000);
+    });
+    updateCartBadge();
+  </script>
+</body>
+</html>

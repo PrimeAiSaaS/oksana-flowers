@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>אודות | אוקסנה פלאוורס</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Heebo:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root{--blush:#F2D7D5;--sage:#B7C9B0;--ivory:#FAF7F2;--dusty-rose:#D4A0A0;--charcoal:#3B3535;--gold:#C9A96E;--white:#FFFFFF;--shadow-card:0 2px 16px rgba(59,53,53,.08);--shadow-hover:0 8px 32px rgba(59,53,53,.15);--radius-md:12px;--radius-lg:24px;--radius-pill:9999px;--transition:220ms ease;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Heebo',sans-serif;background:var(--ivory);color:var(--charcoal);font-size:16px;line-height:1.65;}
+    a{text-decoration:none;color:inherit;}
+    button{cursor:pointer;font-family:inherit;border:none;}
+    .container{max-width:1240px;margin-inline:auto;padding-inline:24px;}
+    .btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--dusty-rose);color:var(--white);font-family:'Heebo',sans-serif;font-size:15px;font-weight:500;padding:13px 32px;border-radius:var(--radius-pill);transition:background var(--transition),transform var(--transition);}
+    .btn-primary:hover{background:#c48888;transform:translateY(-2px);}
+
+    /* Navbar */
+    .navbar{position:sticky;top:0;z-index:100;background:var(--white);box-shadow:0 1px 8px rgba(59,53,53,.07);height:68px;display:flex;align-items:center;}
+    .navbar .container{display:flex;align-items:center;justify-content:space-between;width:100%;}
+    .navbar-logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:var(--charcoal);}
+    .navbar-logo span{color:var(--dusty-rose);}
+    .navbar-nav{display:flex;align-items:center;gap:32px;list-style:none;}
+    .navbar-nav a{font-size:14px;color:var(--charcoal);transition:color var(--transition);}
+    .navbar-nav a:hover,.navbar-nav a.active{color:var(--dusty-rose);}
+    .cart-btn{position:relative;background:none;padding:6px;border-radius:50%;border:none;cursor:pointer;transition:background var(--transition);}
+    .cart-btn:hover{background:var(--blush);}
+    .cart-btn svg{width:22px;height:22px;stroke:var(--charcoal);fill:none;stroke-width:1.5;}
+    .cart-badge{position:absolute;top:-2px;left:-2px;background:var(--dusty-rose);color:var(--white);font-size:10px;font-weight:600;width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+
+    /* Page hero */
+    .about-hero{background:linear-gradient(135deg,#f0dbd8 0%,#e8d5d0 50%,#f5ede8 100%);padding-block:64px;text-align:center;position:relative;overflow:hidden;}
+    .about-hero::before{content:'🌺';font-size:200px;opacity:.06;position:absolute;right:-20px;top:50%;transform:translateY(-50%);}
+    .about-hero::after{content:'🌿';font-size:160px;opacity:.06;position:absolute;left:-10px;bottom:-20px;}
+    .about-hero-eyebrow{font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--dusty-rose);margin-bottom:14px;}
+    .about-hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,5vw,56px);font-weight:300;color:var(--charcoal);line-height:1.2;}
+    .about-hero-title em{font-style:italic;color:#9e6e6e;}
+
+    /* Story */
+    .section-story{padding-block:80px;background:var(--white);}
+    .story-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;}
+    .story-img{aspect-ratio:4/5;border-radius:var(--radius-lg);background:linear-gradient(160deg,#e8d4d0 0%,#d4bfba 50%,#c9b0aa 100%);display:flex;align-items:center;justify-content:center;font-size:120px;position:relative;}
+    .story-img::after{content:'';position:absolute;inset:20px -20px -20px 20px;border:1.5px solid var(--sage);border-radius:var(--radius-lg);z-index:-1;}
+    .story-eyebrow{font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--sage);margin-bottom:16px;}
+    .story-title{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:300;line-height:1.2;color:var(--charcoal);margin-bottom:24px;}
+    .story-title em{font-style:italic;color:#9e6e6e;}
+    .story-text{font-size:16px;color:#6b5e5e;line-height:1.8;margin-bottom:18px;}
+    .story-signature{font-family:'Cormorant Garamond',serif;font-size:28px;font-style:italic;color:var(--dusty-rose);margin-top:28px;}
+
+    /* Values */
+    .section-values{padding-block:80px;}
+    .section-title{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:400;color:var(--charcoal);text-align:center;margin-bottom:8px;}
+    .section-title::after{content:'';display:block;width:48px;height:1px;background:var(--sage);margin:12px auto 0;}
+    .section-subtitle{text-align:center;color:#7a6f6f;font-size:15px;margin-bottom:48px;}
+    .values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+    .value-card{background:var(--white);border-radius:var(--radius-md);padding:36px 28px;box-shadow:var(--shadow-card);text-align:center;transition:transform var(--transition),box-shadow var(--transition);}
+    .value-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-hover);}
+    .value-icon{width:64px;height:64px;border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;font-size:28px;}
+    .value-icon.pink{background:var(--blush);}
+    .value-icon.green{background:#ddf0d8;}
+    .value-icon.gold{background:#f7ecd8;}
+    .value-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:400;margin-bottom:12px;}
+    .value-text{font-size:15px;color:#7a6f6f;line-height:1.65;}
+
+    /* Stats */
+    .section-stats{padding-block:64px;background:var(--charcoal);color:var(--white);}
+    .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;text-align:center;}
+    .stat-number{font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:300;color:var(--dusty-rose);line-height:1;}
+    .stat-label{font-size:14px;color:rgba(255,255,255,.65);margin-top:8px;}
+
+    /* Location */
+    .section-location{padding-block:72px;background:var(--white);}
+    .location-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
+    .location-map-placeholder{height:320px;background:linear-gradient(160deg,#dce9d8,#cddfc8,#bdd4b7);border-radius:var(--radius-lg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:#6b5e5e;font-size:14px;}
+    .location-map-placeholder .map-icon{font-size:48px;}
+    .location-eyebrow{font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--sage);margin-bottom:14px;}
+    .location-title{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:300;margin-bottom:20px;}
+    .location-detail{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px;font-size:15px;color:#6b5e5e;}
+    .location-detail-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
+
+    /* Footer */
+    footer{background:var(--charcoal);color:rgba(255,255,255,.75);padding-block:48px 24px;}
+    .footer-simple{display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center;}
+    .footer-logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--white);}
+    .footer-logo span{color:var(--dusty-rose);}
+    .footer-nav{display:flex;gap:28px;list-style:none;flex-wrap:wrap;justify-content:center;}
+    .footer-nav a{font-size:13px;color:rgba(255,255,255,.65);transition:color var(--transition);}
+    .footer-nav a:hover{color:var(--dusty-rose);}
+    .footer-copy{font-size:12px;color:rgba(255,255,255,.4);border-top:1px solid rgba(255,255,255,.08);padding-top:20px;width:100%;text-align:center;}
+    .whatsapp-btn{display:inline-flex;align-items:center;gap:8px;background:#25D366;color:var(--white);font-family:'Heebo',sans-serif;font-size:14px;font-weight:500;padding:10px 22px;border-radius:var(--radius-pill);}
+
+    @media(max-width:1024px){.story-grid,.location-grid{grid-template-columns:1fr;}.stats-grid{grid-template-columns:repeat(2,1fr);}.values-grid{grid-template-columns:1fr;}}
+    @media(max-width:768px){.navbar-nav{display:none;}}
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav class="navbar">
+      <div class="container">
+        <a href="./index.html" class="navbar-logo">Oksana <span>Flowers</span></a>
+        <ul class="navbar-nav">
+          <li><a href="./index.html">ראשי</a></li>
+          <li><a href="./shop.html">חנות</a></li>
+          <li><a href="./bridal.html">זרי כלה</a></li>
+          <li><a href="./about.html" class="active">אודות</a></li>
+          <li><a href="./contact.html">צור קשר</a></li>
+        </ul>
+        <div style="display:flex;align-items:center;gap:16px;">
+          <a href="./cart.html" class="cart-btn" aria-label="עגלת קניות">
+            <svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            <span class="cart-badge">0</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <section class="about-hero">
+    <div class="container">
+      <p class="about-hero-eyebrow">✦ הסיפור שלנו ✦</p>
+      <h1 class="about-hero-title">יצירה מתוך<br><em>אהבה לפרחים</em></h1>
+    </div>
+  </section>
+
+  <!-- Story -->
+  <section class="section-story">
+    <div class="container">
+      <div class="story-grid">
+        <div class="story-img" style="font-size:100px;opacity:.4;">🌺</div>
+        <div>
+          <p class="story-eyebrow">✦ אוקסנה מספרת ✦</p>
+          <h2 class="story-title">15 שנה של<br><em>אהבה בעבודה</em></h2>
+          <p class="story-text">
+            גדלתי עם ריח פרחים בבית. סבתא שלי גידלה גינה שהיתה כמו ציור — וממנה ירשתי את האהבה לכל פרח ועלה.
+            לפני 15 שנה פתחתי את הסטודיו שלי בנוף הגליל, ומאז כל יום הוא מחדש יצירה.
+          </p>
+          <p class="story-text">
+            כל זר שאני מכינה הוא פועל ידיים עם לב — אני מאמינה שפרח נכון יכול לומר מה שמילים לא יכולות.
+            לכן כל לקוח מקבל ממני תשומת לב אמיתית, זמן ולב שלם.
+          </p>
+          <p class="story-text">
+            הסטודיו שלי הוא מקום שבו בוטניקה פוגשת אמנות. מוזמנים לבוא, להריח, לחלום — ויחד נמצא את הפרח שמספר את הסיפור שלכם.
+          </p>
+          <div class="story-signature">אוקסנה ✦</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Values -->
+  <section class="section-values">
+    <div class="container">
+      <h2 class="section-title">הערכים שלנו</h2>
+      <p class="section-subtitle">מה מנחה אותנו בכל יצירה</p>
+      <div class="values-grid">
+        <div class="value-card">
+          <div class="value-icon pink">💎</div>
+          <h3 class="value-title">איכות ללא פשרות</h3>
+          <p class="value-text">רק פרחים שנקטפו היום. כל בוקר אני מגיעה לשוק ובוחרת בעצמי — כי הפרחים הכי טריים מספרים את הסיפור הכי יפה.</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon green">🌿</div>
+          <h3 class="value-title">יצירתיות אמיתית</h3>
+          <p class="value-text">כל זר הוא יצירה חד-פעמית. אין תבניות, אין עתקים — רק הקשבה לכם ויצירה שנולדת מהשיח בינינו.</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon gold">💛</div>
+          <h3 class="value-title">אהבה לעבודה</h3>
+          <p class="value-text">אני עושה את העבודה הזו כי אני אוהבת אותה. הלקוחות שלי מרגישים את זה — ולכן חוזרים שוב ושוב.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="section-stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div>
+          <div class="stat-number">15+</div>
+          <div class="stat-label">שנות ניסיון</div>
+        </div>
+        <div>
+          <div class="stat-number">3,200+</div>
+          <div class="stat-label">לקוחות מרוצים</div>
+        </div>
+        <div>
+          <div class="stat-number">850+</div>
+          <div class="stat-label">חתונות מקושטות</div>
+        </div>
+        <div>
+          <div class="stat-number">100%</div>
+          <div class="stat-label">אהבה בכל זר</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Location -->
+  <section class="section-location">
+    <div class="container">
+      <div class="location-grid">
+        <div>
+          <p class="location-eyebrow">✦ מצאו אותנו ✦</p>
+          <h2 class="location-title">הסטודיו שלנו<br>בנוף הגליל</h2>
+          <div class="location-detail">
+            <span class="location-detail-icon">📍</span>
+            <span>מרכז רסקו, נוף הגליל (נצרת עילית)</span>
+          </div>
+          <div class="location-detail">
+            <span class="location-detail-icon">🕐</span>
+            <span>ראשון–שישי: 09:00–19:00 | שבת: סגור</span>
+          </div>
+          <div class="location-detail">
+            <span class="location-detail-icon">📞</span>
+            <span>050-XXX-XXXX</span>
+          </div>
+          <div class="location-detail">
+            <span class="location-detail-icon">💬</span>
+            <span>וואטסאפ: 050-XXX-XXXX</span>
+          </div>
+          <br/>
+          <a href="./contact.html" class="btn-primary">צרי קשר</a>
+        </div>
+        <div class="location-map-placeholder">
+          <div class="map-icon">🗺️</div>
+          <span>מרכז רסקו, נוף הגליל</span>
+          <a href="./contact.html" style="color:var(--dusty-rose);font-weight:500;margin-top:8px;">לפרטים ומפה מלאה ←</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-simple">
+        <div class="footer-logo">Oksana <span>Flowers</span></div>
+        <ul class="footer-nav">
+          <li><a href="./index.html">ראשי</a></li>
+          <li><a href="./shop.html">חנות</a></li>
+          <li><a href="./bridal.html">זרי כלה</a></li>
+          <li><a href="./about.html">אודות</a></li>
+          <li><a href="./contact.html">צור קשר</a></li>
+        </ul>
+        <a href="https://wa.me/972500000000" class="whatsapp-btn">💬 הזמנה בוואטסאפ</a>
+        <div class="footer-copy">© 2026 Oksana Flowers · מרכז רסקו, נוף הגליל</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function updateCartBadge(){const cart=JSON.parse(localStorage.getItem('oksana-cart')||'[]');const count=cart.reduce((s,i)=>s+(i.qty||1),0);document.querySelector('.cart-badge').textContent=count;}
+    updateCartBadge();
+  </script>
+</body>
+</html>

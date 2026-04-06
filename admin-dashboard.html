@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>לוח בקרה | Oksana Flowers Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Heebo:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --blush:      #F2D7D5;
+      --sage:       #B7C9B0;
+      --ivory:      #FAF7F2;
+      --dusty-rose: #D4A0A0;
+      --charcoal:   #3B3535;
+      --gold:       #C9A96E;
+      --white:      #FFFFFF;
+      --shadow-card:  0 2px 16px rgba(59,53,53,.08);
+      --shadow-hover: 0 8px 28px rgba(59,53,53,.14);
+      --radius-md:  12px;
+      --radius-lg:  20px;
+      --radius-pill:9999px;
+      --transition: 200ms ease;
+
+      /* Kanban column colours */
+      --col-new:      #fff4f2;
+      --col-new-hd:   #e8b4af;
+      --col-prep:     #fff9ee;
+      --col-prep-hd:  #d4b87a;
+      --col-out:      #f0f7ff;
+      --col-out-hd:   #89b4d4;
+      --col-done:     #f0faf2;
+      --col-done-hd:  #7aba8a;
+
+      /* Status badge colours */
+      --badge-new:  #e07878;
+      --badge-prep: #c9a060;
+      --badge-out:  #5a9ac0;
+      --badge-done: #5aab6a;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Heebo', sans-serif; background: #f0ebe8; color: var(--charcoal); font-size: 15px; line-height: 1.6; min-height: 100vh; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; font-family: inherit; border: none; }
+
+    /* ── Top bar ── */
+    .topbar {
+      background: var(--charcoal); color: var(--white);
+      height: 60px; display: flex; align-items: center;
+      padding-inline: 24px; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,.2);
+    }
+    .topbar-logo { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 400; }
+    .topbar-logo span { color: var(--dusty-rose); }
+    .topbar-badge { font-size: 12px; background: var(--dusty-rose); padding: 3px 10px; border-radius: var(--radius-pill); margin-right: 8px; }
+    .topbar-right { display: flex; align-items: center; gap: 16px; }
+    .topbar-time { font-size: 13px; color: rgba(255,255,255,.5); }
+    .topbar-store-link { font-size: 13px; color: rgba(255,255,255,.6); transition: color var(--transition); }
+    .topbar-store-link:hover { color: var(--dusty-rose); }
+    .refresh-btn { background: rgba(255,255,255,.1); color: var(--white); padding: 7px 16px; border-radius: var(--radius-pill); font-size: 13px; font-weight: 500; transition: background var(--transition); }
+    .refresh-btn:hover { background: rgba(255,255,255,.2); }
+
+    /* ── Stats row ── */
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; padding: 20px 24px 0; }
+    .stat-card { background: var(--white); border-radius: var(--radius-md); padding: 18px 20px; box-shadow: var(--shadow-card); display: flex; align-items: center; gap: 14px; }
+    .stat-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+    .stat-icon.red   { background: #fde8e8; }
+    .stat-icon.amber { background: #fef3e0; }
+    .stat-icon.blue  { background: #e5f0fb; }
+    .stat-icon.green { background: #e6f5ea; }
+    .stat-value { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 600; line-height: 1; }
+    .stat-label { font-size: 12px; color: #9e8e8e; margin-top: 2px; }
+
+    /* ── Toolbar ── */
+    .toolbar { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; gap: 12px; flex-wrap: wrap; }
+    .toolbar-title { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 400; }
+    .toolbar-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .search-box { display: flex; align-items: center; gap: 8px; background: var(--white); border: 1.5px solid #e4d8d4; border-radius: var(--radius-pill); padding: 8px 16px; }
+    .search-box input { border: none; outline: none; font-family: 'Heebo', sans-serif; font-size: 14px; background: none; width: 180px; }
+    .filter-select { padding: 8px 14px; border: 1.5px solid #e4d8d4; border-radius: var(--radius-pill); font-family: 'Heebo', sans-serif; font-size: 14px; background: var(--white); appearance: none; cursor: pointer; }
+    .seed-btn { background: #e8f4e8; color: #2d6e4e; padding: 8px 16px; border-radius: var(--radius-pill); font-size: 13px; font-weight: 500; transition: background var(--transition); }
+    .seed-btn:hover { background: #d0ecd0; }
+    .clear-btn { background: #fde8e8; color: #b05050; padding: 8px 16px; border-radius: var(--radius-pill); font-size: 13px; font-weight: 500; transition: background var(--transition); }
+    .clear-btn:hover { background: #f5d0d0; }
+
+    /* ── Kanban board ── */
+    .kanban-board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; padding: 0 24px 32px; align-items: start; }
+    .kanban-col { border-radius: var(--radius-lg); overflow: hidden; min-height: 200px; }
+    .col-header { padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; }
+    .col-header.new  { background: var(--col-new-hd);  }
+    .col-header.prep { background: var(--col-prep-hd); }
+    .col-header.out  { background: var(--col-out-hd);  }
+    .col-header.done { background: var(--col-done-hd); }
+    .col-title { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 500; color: var(--white); display: flex; align-items: center; gap: 8px; }
+    .col-title .col-icon { font-size: 16px; }
+    .col-count { background: rgba(255,255,255,.35); color: var(--white); font-size: 12px; font-weight: 700; min-width: 22px; height: 22px; border-radius: var(--radius-pill); display: flex; align-items: center; justify-content: center; padding-inline: 6px; }
+    .col-body { background: var(--white); padding: 12px; display: flex; flex-direction: column; gap: 10px; min-height: 120px; }
+    .col-body.new  { background: var(--col-new);  }
+    .col-body.prep { background: var(--col-prep); }
+    .col-body.out  { background: var(--col-out);  }
+    .col-body.done { background: var(--col-done); }
+
+    /* ── Order card ── */
+    .order-card {
+      background: var(--white); border-radius: var(--radius-md);
+      box-shadow: var(--shadow-card); padding: 14px 16px;
+      transition: transform var(--transition), box-shadow var(--transition);
+      cursor: default; position: relative;
+    }
+    .order-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+    .order-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+    .order-id { font-size: 11px; font-weight: 600; color: #9e8e8e; letter-spacing: .04em; font-family: monospace; }
+    .order-date-badge { font-size: 11px; color: #9e8e8e; }
+    .order-recipient { font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 500; margin-bottom: 2px; }
+    .order-sender { font-size: 12px; color: #9e8e8e; margin-bottom: 8px; }
+    .order-delivery { display: flex; align-items: center; gap: 5px; font-size: 13px; color: #6b5e5e; margin-bottom: 8px; }
+    .order-delivery .icon { font-size: 14px; }
+    .order-items-summary { font-size: 12px; color: #9e8e8e; margin-bottom: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .order-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 10px; border-top: 1px solid #f0e8e4; }
+    .order-total { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; color: var(--gold); }
+    .order-actions { display: flex; gap: 6px; }
+    .action-btn { padding: 5px 12px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 500; transition: background var(--transition), color var(--transition); }
+    .action-btn.view-card { background: #fef3e0; color: #8a6020; }
+    .action-btn.view-card:hover { background: #f7e4b8; }
+    .action-btn.move-fwd { background: var(--dusty-rose); color: var(--white); }
+    .action-btn.move-fwd:hover { background: #c48888; }
+    .action-btn.move-back { background: #f0ebe8; color: #9e8e8e; }
+    .action-btn.move-back:hover { background: #e4dbd8; }
+    .action-btn.delete-btn { background: #fde8e8; color: #b05050; }
+    .action-btn.delete-btn:hover { background: #f5d0d0; }
+
+    /* Greeting card ribbon */
+    .has-greeting::before {
+      content: '💌'; position: absolute; top: 10px; left: 14px;
+      font-size: 14px; opacity: .6;
+    }
+
+    /* Empty column state */
+    .col-empty { text-align: center; padding: 28px 16px; color: #b0a0a0; font-size: 13px; }
+    .col-empty-icon { font-size: 28px; opacity: .35; margin-bottom: 8px; }
+
+    /* ── Greeting modal ── */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(59,53,53,.45); z-index: 300; display: none; align-items: center; justify-content: center; padding: 24px; }
+    .modal-overlay.visible { display: flex; }
+    .modal { background: var(--white); border-radius: var(--radius-lg); padding: 36px; max-width: 440px; width: 100%; box-shadow: 0 20px 60px rgba(59,53,53,.25); position: relative; }
+    .modal-close { position: absolute; top: 16px; left: 16px; background: #f0e8e4; border: none; cursor: pointer; width: 30px; height: 30px; border-radius: 50%; font-size: 14px; color: #9e8e8e; display: flex; align-items: center; justify-content: center; transition: background var(--transition); }
+    .modal-close:hover { background: var(--blush); }
+    .modal-icon { font-size: 36px; text-align: center; margin-bottom: 12px; }
+    .modal-title { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 400; text-align: center; margin-bottom: 4px; }
+    .modal-sub { font-size: 13px; color: #9e8e8e; text-align: center; margin-bottom: 20px; }
+    .modal-message { background: var(--ivory); border-radius: 10px; padding: 18px 20px; font-size: 15px; color: var(--charcoal); line-height: 1.7; min-height: 80px; font-style: italic; border-right: 3px solid var(--dusty-rose); }
+    .modal-empty { color: #b0a0a0; font-style: normal; }
+    .modal-meta { margin-top: 16px; display: flex; gap: 12px; flex-wrap: wrap; }
+    .meta-pill { background: var(--blush); color: var(--charcoal); font-size: 12px; padding: 4px 12px; border-radius: var(--radius-pill); }
+
+    /* ── Order detail modal ── */
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+    .detail-item { background: var(--ivory); border-radius: 8px; padding: 10px 14px; }
+    .detail-label { font-size: 11px; color: #9e8e8e; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 3px; }
+    .detail-value { font-size: 14px; font-weight: 500; }
+    .detail-items-list { background: var(--ivory); border-radius: 8px; padding: 12px 14px; margin-bottom: 12px; }
+    .detail-item-row { display: flex; justify-content: space-between; font-size: 14px; padding-block: 4px; border-bottom: 1px solid #e8e0dc; }
+    .detail-item-row:last-child { border-bottom: none; }
+
+    @media (max-width: 1280px) { .kanban-board { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 768px) {
+      .kanban-board { grid-template-columns: 1fr; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .toolbar { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top bar -->
+  <header class="topbar">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span class="topbar-logo">Oksana <span>Flowers</span></span>
+      <span class="topbar-badge">Admin</span>
+    </div>
+    <div class="topbar-right">
+      <span class="topbar-time" id="topbar-time"></span>
+      <a href="./index.html" class="topbar-store-link">← לחנות</a>
+      <button class="refresh-btn" onclick="refreshBoard()">↻ רענן</button>
+    </div>
+  </header>
+
+  <!-- Stats row -->
+  <div class="stats-row" id="stats-row">
+    <div class="stat-card">
+      <div class="stat-icon red">🆕</div>
+      <div><div class="stat-value" id="stat-new">0</div><div class="stat-label">הזמנות חדשות</div></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon amber">🌸</div>
+      <div><div class="stat-value" id="stat-prep">0</div><div class="stat-label">בהכנה</div></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon blue">🚚</div>
+      <div><div class="stat-value" id="stat-out">0</div><div class="stat-label">בדרך</div></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon green">✅</div>
+      <div><div class="stat-value" id="stat-done">0</div><div class="stat-label">הושלמו</div></div>
+    </div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <h1 class="toolbar-title">לוח הזמנות — Kanban</h1>
+    <div class="toolbar-actions">
+      <div class="search-box">
+        <span>🔍</span>
+        <input type="text" id="search-input" placeholder="חיפוש לפי שם / מזהה..." />
+      </div>
+      <select class="filter-select" id="date-filter">
+        <option value="">כל התאריכים</option>
+        <option value="today">היום</option>
+        <option value="tomorrow">מחר</option>
+        <option value="week">השבוע</option>
+      </select>
+      <button class="seed-btn" onclick="seedDemoOrders()">+ הוסף הזמנות דמו</button>
+      <button class="clear-btn" onclick="clearAllOrders()">🗑 נקה הכל</button>
+    </div>
+  </div>
+
+  <!-- Kanban board -->
+  <div class="kanban-board">
+    <div class="kanban-col">
+      <div class="col-header new">
+        <span class="col-title"><span class="col-icon">🆕</span> הזמנות חדשות</span>
+        <span class="col-count" id="count-new">0</span>
+      </div>
+      <div class="col-body new" id="col-new"></div>
+    </div>
+    <div class="kanban-col">
+      <div class="col-header prep">
+        <span class="col-title"><span class="col-icon">🌸</span> בהכנה</span>
+        <span class="col-count" id="count-preparing">0</span>
+      </div>
+      <div class="col-body prep" id="col-preparing"></div>
+    </div>
+    <div class="kanban-col">
+      <div class="col-header out">
+        <span class="col-title"><span class="col-icon">🚚</span> יצא למשלוח</span>
+        <span class="col-count" id="count-out-for-delivery">0</span>
+      </div>
+      <div class="col-body out" id="col-out-for-delivery"></div>
+    </div>
+    <div class="kanban-col">
+      <div class="col-header done">
+        <span class="col-title"><span class="col-icon">✅</span> הושלם</span>
+        <span class="col-count" id="count-completed">0</span>
+      </div>
+      <div class="col-body done" id="col-completed"></div>
+    </div>
+  </div>
+
+  <!-- Greeting Card Modal -->
+  <div class="modal-overlay" id="greeting-modal">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('greeting-modal')" aria-label="סגור">✕</button>
+      <div class="modal-icon">💌</div>
+      <h2 class="modal-title">כרטיס ברכה</h2>
+      <p class="modal-sub" id="greeting-modal-sub">—</p>
+      <div class="modal-message" id="greeting-modal-text"></div>
+      <div class="modal-meta" id="greeting-modal-meta"></div>
+    </div>
+  </div>
+
+  <!-- Order Detail Modal -->
+  <div class="modal-overlay" id="detail-modal">
+    <div class="modal" style="max-width:520px;">
+      <button class="modal-close" onclick="closeModal('detail-modal')" aria-label="סגור">✕</button>
+      <h2 class="modal-title" id="detail-modal-title">פרטי הזמנה</h2>
+      <p class="modal-sub" id="detail-modal-id"></p>
+      <div id="detail-modal-body"></div>
+    </div>
+  </div>
+
+  <script>
+    // ── Constants ─────────────────────────────────────────────────────────────
+    const STATUSES = ['new', 'preparing', 'out-for-delivery', 'completed'];
+    const STATUS_LABELS = {
+      'new':              'חדשה',
+      'preparing':        'בהכנה',
+      'out-for-delivery': 'יצא למשלוח',
+      'completed':        'הושלם',
+    };
+    const STATUS_NEXT_LABEL = {
+      'new':              'התחל הכנה →',
+      'preparing':        'יצא למשלוח →',
+      'out-for-delivery': 'סמן כהושלם ✓',
+      'completed':        null,
+    };
+    const STATUS_BACK_LABEL = {
+      'new':              null,
+      'preparing':        '← חדשה',
+      'out-for-delivery': '← הכנה',
+      'completed':        '← בדרך',
+    };
+
+    // ── Storage ───────────────────────────────────────────────────────────────
+    function getOrders() { return JSON.parse(localStorage.getItem('orders') || '[]'); }
+    function saveOrders(o) { localStorage.setItem('orders', JSON.stringify(o)); }
+
+    function moveStatus(orderId, direction) {
+      const orders = getOrders();
+      const order = orders.find(o => o.id === orderId);
+      if (!order) return;
+      const idx = STATUSES.indexOf(order.status);
+      if (direction === 'fwd' && idx < STATUSES.length - 1) order.status = STATUSES[idx + 1];
+      if (direction === 'back' && idx > 0) order.status = STATUSES[idx - 1];
+      saveOrders(orders);
+      refreshBoard();
+    }
+
+    function deleteOrder(orderId) {
+      if (!confirm('האם למחוק הזמנה ' + orderId + '?')) return;
+      const orders = getOrders().filter(o => o.id !== orderId);
+      saveOrders(orders);
+      refreshBoard();
+    }
+
+    // ── Filters ───────────────────────────────────────────────────────────────
+    function getSearchQuery() { return (document.getElementById('search-input').value || '').trim().toLowerCase(); }
+    function getDateFilter() { return document.getElementById('date-filter').value; }
+
+    function matchesFilters(order) {
+      const q = getSearchQuery();
+      if (q) {
+        const hay = [order.id, order.senderName, order.recipientName, order.deliveryAddress, order.phone].join(' ').toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      const df = getDateFilter();
+      if (df) {
+        const today = new Date(); today.setHours(0,0,0,0);
+        const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1);
+        const weekEnd = new Date(today); weekEnd.setDate(weekEnd.getDate() + 7);
+        const d = new Date(order.deliveryDate + 'T00:00:00');
+        if (df === 'today' && !(d >= today && d < tomorrow)) return false;
+        if (df === 'tomorrow' && !(d >= tomorrow && d < new Date(tomorrow.getTime() + 86400000))) return false;
+        if (df === 'week' && !(d >= today && d <= weekEnd)) return false;
+      }
+      return true;
+    }
+
+    // ── Rendering ─────────────────────────────────────────────────────────────
+    function formatDate(iso) {
+      if (!iso) return '—';
+      const [y,m,d] = iso.split('-');
+      return `${d}/${m}/${y}`;
+    }
+    function formatTs(iso) {
+      if (!iso) return '—';
+      const d = new Date(iso);
+      return d.toLocaleDateString('he-IL') + ' ' + d.toLocaleTimeString('he-IL', {hour:'2-digit',minute:'2-digit'});
+    }
+    function formatPrice(n) { return Number(n || 0).toLocaleString('he-IL') + ' ₪'; }
+
+    function buildOrderCard(order) {
+      const nextLabel = STATUS_NEXT_LABEL[order.status];
+      const backLabel = STATUS_BACK_LABEL[order.status];
+      const hasGreeting = order.greetingMessage && order.greetingMessage.trim().length > 0;
+      const itemsSummary = (order.items || []).map(i => i.name).join(' · ') || '—';
+
+      return `
+        <div class="order-card${hasGreeting ? ' has-greeting' : ''}" id="card-${order.id}">
+          <div class="order-card-top">
+            <span class="order-id">${order.id}</span>
+            <span class="order-date-badge">נוצר: ${formatTs(order.timestamp)}</span>
+          </div>
+          <div class="order-recipient">ל: ${order.recipientName || '—'}</div>
+          <div class="order-sender">משולח: ${order.senderName || '—'} · ${order.phone || '—'}</div>
+          <div class="order-delivery">
+            <span class="icon">📅</span> משלוח: ${formatDate(order.deliveryDate)}
+          </div>
+          <div class="order-delivery" style="margin-bottom:6px;">
+            <span class="icon">📍</span> ${order.deliveryAddress || '—'}
+          </div>
+          <div class="order-items-summary">🌸 ${itemsSummary}</div>
+          <div class="order-footer">
+            <span class="order-total">${formatPrice(order.total)}</span>
+            <div class="order-actions">
+              ${hasGreeting
+                ? `<button class="action-btn view-card" onclick="showGreeting('${order.id}')">💌 כרטיס</button>`
+                : ''}
+              <button class="action-btn view-card" style="background:#f0f0f8;color:#5060a0;" onclick="showDetail('${order.id}')">📋 פרטים</button>
+              ${backLabel ? `<button class="action-btn move-back" onclick="moveStatus('${order.id}','back')">${backLabel}</button>` : ''}
+              ${nextLabel ? `<button class="action-btn move-fwd" onclick="moveStatus('${order.id}','fwd')">${nextLabel}</button>` : ''}
+              <button class="action-btn delete-btn" onclick="deleteOrder('${order.id}')">✕</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function buildEmptyCol(status) {
+      const icons = { new:'🌱', preparing:'🌸', 'out-for-delivery':'🚚', completed:'✅' };
+      const msgs  = { new:'אין הזמנות חדשות', preparing:'אין הזמנות בהכנה', 'out-for-delivery':'אין הזמנות בדרך', completed:'אין הזמנות שהושלמו' };
+      return `<div class="col-empty"><div class="col-empty-icon">${icons[status]}</div>${msgs[status]}</div>`;
+    }
+
+    function refreshBoard() {
+      const allOrders = getOrders();
+      const filtered = allOrders.filter(matchesFilters);
+
+      let counts = { new: 0, preparing: 0, 'out-for-delivery': 0, completed: 0 };
+      allOrders.forEach(o => { if (counts[o.status] !== undefined) counts[o.status]++; });
+
+      // Stats
+      document.getElementById('stat-new').textContent  = counts['new'];
+      document.getElementById('stat-prep').textContent = counts['preparing'];
+      document.getElementById('stat-out').textContent  = counts['out-for-delivery'];
+      document.getElementById('stat-done').textContent = counts['completed'];
+
+      STATUSES.forEach(status => {
+        const colId = 'col-' + status;
+        const countId = 'count-' + status;
+        const colOrders = filtered.filter(o => o.status === status);
+        document.getElementById(countId).textContent = colOrders.length;
+        const col = document.getElementById(colId);
+        if (colOrders.length === 0) {
+          col.innerHTML = buildEmptyCol(status);
+        } else {
+          col.innerHTML = colOrders.map(buildOrderCard).join('');
+        }
+      });
+    }
+
+    // ── Modals ────────────────────────────────────────────────────────────────
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('visible');
+    }
+    // Close on overlay click
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', function(e) {
+        if (e.target === this) this.classList.remove('visible');
+      });
+    });
+    // Close on Escape
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.visible').forEach(m => m.classList.remove('visible'));
+    });
+
+    function showGreeting(orderId) {
+      const order = getOrders().find(o => o.id === orderId);
+      if (!order) return;
+      document.getElementById('greeting-modal-sub').textContent = `הזמנה ${orderId} · ל: ${order.recipientName}`;
+      const msgEl = document.getElementById('greeting-modal-text');
+      if (order.greetingMessage && order.greetingMessage.trim()) {
+        msgEl.textContent = order.greetingMessage;
+        msgEl.classList.remove('modal-empty');
+      } else {
+        msgEl.textContent = 'לא צוינה הודעה לכרטיס';
+        msgEl.classList.add('modal-empty');
+      }
+      document.getElementById('greeting-modal-meta').innerHTML = `
+        <span class="meta-pill">משולח: ${order.senderName}</span>
+        <span class="meta-pill">תאריך: ${formatDate(order.deliveryDate)}</span>
+      `;
+      document.getElementById('greeting-modal').classList.add('visible');
+    }
+
+    function showDetail(orderId) {
+      const order = getOrders().find(o => o.id === orderId);
+      if (!order) return;
+      document.getElementById('detail-modal-title').textContent = 'פרטי הזמנה';
+      document.getElementById('detail-modal-id').textContent = orderId;
+      const items = (order.items || []).map(i =>
+        `<div class="detail-item-row"><span>${i.name} × ${i.qty || 1}</span><span style="color:var(--gold);font-family:'Cormorant Garamond',serif;">${formatPrice(i.price * (i.qty || 1))}</span></div>`
+      ).join('');
+      document.getElementById('detail-modal-body').innerHTML = `
+        <div class="detail-grid">
+          <div class="detail-item"><div class="detail-label">שולח</div><div class="detail-value">${order.senderName}</div></div>
+          <div class="detail-item"><div class="detail-label">טלפון</div><div class="detail-value">${order.phone}</div></div>
+          <div class="detail-item"><div class="detail-label">מקבל</div><div class="detail-value">${order.recipientName}</div></div>
+          <div class="detail-item"><div class="detail-label">תאריך משלוח</div><div class="detail-value">${formatDate(order.deliveryDate)}</div></div>
+          <div class="detail-item" style="grid-column:1/-1;"><div class="detail-label">כתובת</div><div class="detail-value">${order.deliveryAddress}</div></div>
+          ${order.notes ? `<div class="detail-item" style="grid-column:1/-1;"><div class="detail-label">הערות</div><div class="detail-value">${order.notes}</div></div>` : ''}
+        </div>
+        <div class="detail-items-list">${items}</div>
+        <div class="detail-grid" style="margin-bottom:0;">
+          <div class="detail-item"><div class="detail-label">סכום ביניים</div><div class="detail-value">${formatPrice(order.subtotal)}</div></div>
+          <div class="detail-item"><div class="detail-label">משלוח</div><div class="detail-value">${order.deliveryFee === 0 ? 'חינם' : formatPrice(order.deliveryFee)}</div></div>
+          <div class="detail-item" style="grid-column:1/-1;background:var(--blush);"><div class="detail-label">סה"כ</div><div class="detail-value" style="font-size:18px;color:var(--gold);font-family:'Cormorant Garamond',serif;">${formatPrice(order.total)}</div></div>
+        </div>
+        ${order.greetingMessage ? `<div style="margin-top:12px;"><div class="detail-label" style="margin-bottom:6px;">כרטיס ברכה 💌</div><div class="modal-message">${order.greetingMessage}</div></div>` : ''}
+      `;
+      document.getElementById('detail-modal').classList.add('visible');
+    }
+
+    // ── Demo data ─────────────────────────────────────────────────────────────
+    function generateId() {
+      return 'OF-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substr(2,4).toUpperCase();
+    }
+    function daysFromNow(n) {
+      const d = new Date(); d.setDate(d.getDate() + n);
+      return d.toISOString().split('T')[0];
+    }
+
+    const DEMO_ORDERS = [
+      { senderName:'מיכל לוי',    phone:'050-111-2222', recipientName:'אמא שלי',       deliveryAddress:'רחוב הרצל 12, נוף הגליל', deliveryDate: daysFromNow(0), greetingMessage:'יום הולדת שמח אמא! את הכי טובה בעולם 🌸', status:'new',      items:[{id:'p1',name:'זר ורדים רומנטי',price:320,qty:1}], subtotal:320,deliveryFee:0,total:320 },
+      { senderName:'דניאל כהן',   phone:'052-333-4444', recipientName:'נועה',          deliveryAddress:'שדרות אלרואי 5, כרמיאל',  deliveryDate: daysFromNow(1), greetingMessage:'', status:'new',      items:[{id:'p2',name:'קולקציית פסטל',price:450,qty:1},{id:'p4',name:'מארז מתנה יוקרתי',price:550,qty:1}], subtotal:1000,deliveryFee:0,total:1000 },
+      { senderName:'יוסי ורד',    phone:'054-555-6666', recipientName:'חן ורד',        deliveryAddress:'רחוב הגפן 3, עכו',        deliveryDate: daysFromNow(2), greetingMessage:'מזל טוב על החתונה! 💍', status:'preparing', items:[{id:'b1',name:'זר כלה קלאסי',price:620,qty:1},{id:'p7',name:'קישוט מכונית בסיסי',price:350,qty:1}], subtotal:970,deliveryFee:0,total:970 },
+      { senderName:'רחל שמש',     phone:'058-777-8888', recipientName:'ד"ר אביגיל',    deliveryAddress:'רחוב נחל שניר 7, נוף הגליל', deliveryDate: daysFromNow(0), greetingMessage:'בהצלחה בהגנה! ✨', status:'out-for-delivery', items:[{id:'p3',name:'גן ירוק מינימליסטי',price:280,qty:2}], subtotal:560,deliveryFee:0,total:560 },
+      { senderName:'אבי גולן',    phone:'050-999-0000', recipientName:'מרים גולן',     deliveryAddress:'שכונת הנשיאים, נצרת עילית', deliveryDate: daysFromNow(-1), greetingMessage:'', status:'completed', items:[{id:'p8',name:'זר טוליפים עונתי',price:210,qty:1}], subtotal:210,deliveryFee:35,total:245 },
+      { senderName:'שרה ברנד',    phone:'052-123-4567', recipientName:'עמית ברנד',     deliveryAddress:'רחוב הזית 18, כרמיאל',    deliveryDate: daysFromNow(3), greetingMessage:'אהבה שלי, הצלחת! גאה בך מאוד 🌷', status:'new', items:[{id:'p2',name:'קולקציית פסטל',price:450,qty:1}], subtotal:450,deliveryFee:0,total:450 },
+    ];
+
+    function seedDemoOrders() {
+      const existing = getOrders();
+      const newOrders = DEMO_ORDERS.map(o => ({
+        ...o,
+        id: generateId(),
+        timestamp: new Date(Date.now() - Math.random() * 86400000 * 2).toISOString(),
+      }));
+      saveOrders([...newOrders, ...existing]);
+      refreshBoard();
+    }
+
+    function clearAllOrders() {
+      if (confirm('למחוק את כל ההזמנות? פעולה זו לא ניתנת לביטול.')) {
+        localStorage.removeItem('orders');
+        refreshBoard();
+      }
+    }
+
+    // ── Clock ─────────────────────────────────────────────────────────────────
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('topbar-time').textContent =
+        now.toLocaleDateString('he-IL') + ' ' + now.toLocaleTimeString('he-IL', {hour:'2-digit',minute:'2-digit'});
+    }
+    setInterval(updateClock, 10000);
+    updateClock();
+
+    // ── Search / filter listeners ─────────────────────────────────────────────
+    document.getElementById('search-input').addEventListener('input', refreshBoard);
+    document.getElementById('date-filter').addEventListener('change', refreshBoard);
+
+    // ── Init ──────────────────────────────────────────────────────────────────
+    refreshBoard();
+  </script>
+</body>
+</html>

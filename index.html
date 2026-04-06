@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>אוקסנה פלאוורס | פרחים יוקרתיים בנוף הגליל</title>
+  <meta name="description" content="זרים יוקרתיים, זרי כלה, וקישוטי מכוניות בנוף הגליל. מרכז רסקו." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Heebo:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Design Tokens ── */
+    :root {
+      --blush:      #F2D7D5;
+      --sage:       #B7C9B0;
+      --ivory:      #FAF7F2;
+      --dusty-rose: #D4A0A0;
+      --charcoal:   #3B3535;
+      --gold:       #C9A96E;
+      --white:      #FFFFFF;
+      --shadow-card:  0 2px 16px rgba(59,53,53,.08);
+      --shadow-hover: 0 8px 32px rgba(59,53,53,.15);
+      --radius-md:  12px;
+      --radius-lg:  24px;
+      --radius-pill:9999px;
+      --transition: 220ms ease;
+    }
+
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Heebo', sans-serif;
+      background: var(--ivory);
+      color: var(--charcoal);
+      font-size: 16px;
+      line-height: 1.65;
+    }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+    button { cursor: pointer; font-family: inherit; border: none; }
+
+    /* ── Utilities ── */
+    .container { max-width: 1240px; margin-inline: auto; padding-inline: 24px; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--dusty-rose); color: var(--white);
+      font-family: 'Heebo', sans-serif; font-size: 15px; font-weight: 500;
+      padding: 13px 32px; border-radius: var(--radius-pill);
+      transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+    }
+    .btn-primary:hover { background: #c48888; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212,160,160,.35); }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: transparent; color: var(--charcoal);
+      font-family: 'Heebo', sans-serif; font-size: 15px; font-weight: 500;
+      padding: 12px 30px; border-radius: var(--radius-pill);
+      border: 1.5px solid var(--charcoal);
+      transition: background var(--transition), color var(--transition);
+    }
+    .btn-secondary:hover { background: var(--charcoal); color: var(--white); }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px; font-weight: 400; color: var(--charcoal);
+      text-align: center; margin-bottom: 8px;
+    }
+    .section-subtitle {
+      text-align: center; color: #7a6f6f; font-size: 15px;
+      margin-bottom: 48px;
+    }
+    .section-title::after {
+      content: ''; display: block; width: 48px; height: 1px;
+      background: var(--sage); margin: 12px auto 0;
+    }
+
+    /* ── Navbar ── */
+    .navbar {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--white);
+      box-shadow: 0 1px 8px rgba(59,53,53,.07);
+      height: 68px; display: flex; align-items: center;
+    }
+    .navbar .container {
+      display: flex; align-items: center;
+      justify-content: space-between; width: 100%;
+    }
+    .navbar-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px; font-weight: 400; letter-spacing: .04em;
+      color: var(--charcoal);
+    }
+    .navbar-logo span { color: var(--dusty-rose); }
+    .navbar-nav { display: flex; align-items: center; gap: 32px; list-style: none; }
+    .navbar-nav a {
+      font-size: 14px; font-weight: 400; color: var(--charcoal);
+      position: relative; transition: color var(--transition);
+    }
+    .navbar-nav a::after {
+      content: ''; position: absolute; bottom: -3px; right: 0;
+      width: 0; height: 1px; background: var(--dusty-rose);
+      transition: width var(--transition);
+    }
+    .navbar-nav a:hover { color: var(--dusty-rose); }
+    .navbar-nav a:hover::after { width: 100%; }
+    .navbar-actions { display: flex; align-items: center; gap: 16px; }
+    .cart-btn {
+      position: relative; background: none;
+      padding: 6px; border-radius: 50%; transition: background var(--transition);
+    }
+    .cart-btn:hover { background: var(--blush); }
+    .cart-btn svg { width: 22px; height: 22px; stroke: var(--charcoal); fill: none; stroke-width: 1.5; }
+    .cart-badge {
+      position: absolute; top: -2px; left: -2px;
+      background: var(--dusty-rose); color: var(--white);
+      font-size: 10px; font-weight: 600; width: 17px; height: 17px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    }
+    .hamburger { display: none; flex-direction: column; gap: 5px; background: none; padding: 4px; }
+    .hamburger span { width: 22px; height: 1.5px; background: var(--charcoal); display: block; border-radius: 2px; }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative; min-height: 620px;
+      display: flex; align-items: center;
+      background: linear-gradient(135deg, #e8ccc9 0%, #f0dbd8 35%, #dde8d9 70%, #f5ede8 100%);
+      overflow: hidden;
+    }
+    .hero-bg-pattern {
+      position: absolute; inset: 0; opacity: .18;
+      background-image:
+        radial-gradient(circle at 20% 50%, #B7C9B0 0px, transparent 300px),
+        radial-gradient(circle at 80% 20%, #D4A0A0 0px, transparent 250px),
+        radial-gradient(circle at 60% 80%, #F2D7D5 0px, transparent 200px);
+    }
+    .hero-florals {
+      position: absolute; inset: 0; overflow: hidden; pointer-events: none;
+    }
+    .hero-florals::before {
+      content: '🌸'; position: absolute;
+      font-size: 180px; opacity: .08;
+      top: -40px; left: 60px; transform: rotate(20deg);
+    }
+    .hero-florals::after {
+      content: '🌿'; position: absolute;
+      font-size: 160px; opacity: .07;
+      bottom: -20px; right: 80px; transform: rotate(-15deg);
+    }
+    .hero-content {
+      position: relative; z-index: 1;
+      max-width: 640px; padding-block: 80px;
+    }
+    .hero-eyebrow {
+      font-family: 'Heebo', sans-serif; font-size: 13px; font-weight: 500;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--dusty-rose); margin-bottom: 16px;
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(42px, 6vw, 68px); font-weight: 300; line-height: 1.15;
+      color: var(--charcoal); margin-bottom: 20px;
+    }
+    .hero-title em { font-style: italic; color: #9e6e6e; }
+    .hero-sub {
+      font-size: 17px; color: #6b5e5e; margin-bottom: 36px; max-width: 400px;
+    }
+    .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; }
+    .hero-scroll {
+      position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      font-size: 11px; letter-spacing: .1em; color: #9e8e8e; z-index: 1;
+    }
+    .hero-scroll svg { width: 18px; height: 18px; stroke: #b0a0a0; fill: none; animation: bounce 1.8s infinite; }
+    @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(5px)} }
+
+    /* ── Categories ── */
+    .section-categories { padding-block: 80px; background: var(--white); }
+    .categories-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .category-card {
+      background: var(--ivory); border-radius: var(--radius-lg);
+      overflow: hidden; box-shadow: var(--shadow-card);
+      transition: transform var(--transition), box-shadow var(--transition);
+      text-decoration: none; color: inherit; display: block;
+    }
+    .category-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-hover); }
+    .category-img {
+      height: 260px; position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .category-img-bouquet { background: linear-gradient(160deg, #F2D7D5 0%, #e8c4c0 50%, #d4b0ab 100%); }
+    .category-img-bridal  { background: linear-gradient(160deg, #f7eeee 0%, #ecd8d8 50%, #dfc5c5 100%); }
+    .category-img-car     { background: linear-gradient(160deg, #d9e6d6 0%, #c5d9c1 50%, #b0ccab 100%); }
+    .category-img-icon { font-size: 80px; opacity: .55; }
+    .category-badge {
+      position: absolute; bottom: 12px; right: 12px;
+      background: rgba(250,247,242,.9); color: var(--gold);
+      font-family: 'Cormorant Garamond', serif; font-size: 14px; font-weight: 600;
+      padding: 4px 12px; border-radius: var(--radius-pill);
+      backdrop-filter: blur(4px);
+    }
+    .category-body { padding: 22px 24px 26px; }
+    .category-name {
+      font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 400;
+      margin-bottom: 8px;
+    }
+    .category-desc { font-size: 14px; color: #7a6f6f; line-height: 1.6; margin-bottom: 16px; }
+    .category-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 14px; color: var(--dusty-rose); font-weight: 500;
+    }
+    .category-link svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; transition: transform var(--transition); }
+    .category-card:hover .category-link svg { transform: translateX(-4px); }
+
+    /* ── Bestsellers ── */
+    .section-bestsellers { padding-block: 80px; }
+    .products-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+    .product-card {
+      background: var(--white); border-radius: var(--radius-md);
+      overflow: hidden; box-shadow: var(--shadow-card);
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .product-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); }
+    .product-img {
+      aspect-ratio: 4/5; position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .product-img-p1 { background: linear-gradient(170deg,#f5ddd9,#e8c6c2,#d9b0ab); }
+    .product-img-p2 { background: linear-gradient(170deg,#f0e8e8,#e4d0cf,#d4baba); }
+    .product-img-p3 { background: linear-gradient(170deg,#dce9d8,#cddfc8,#bdd4b7); }
+    .product-img-p4 { background: linear-gradient(170deg,#f7e8e0,#f0d5c8,#e8c5b0); }
+    .product-img-icon { font-size: 64px; opacity: .5; }
+    .product-tag {
+      position: absolute; top: 12px; right: 12px;
+      background: var(--dusty-rose); color: var(--white);
+      font-size: 11px; font-weight: 600; padding: 3px 10px;
+      border-radius: var(--radius-pill); letter-spacing: .06em;
+    }
+    .product-body { padding: 16px 18px 20px; }
+    .product-name {
+      font-family: 'Cormorant Garamond', serif; font-size: 19px; font-weight: 500;
+      margin-bottom: 6px; line-height: 1.3;
+    }
+    .product-desc { font-size: 13px; color: #9e8e8e; margin-bottom: 14px; line-height: 1.5; }
+    .product-footer { display: flex; align-items: center; justify-content: space-between; }
+    .product-price {
+      font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600;
+      color: var(--gold);
+    }
+    .add-to-cart-btn {
+      background: var(--dusty-rose); color: var(--white);
+      font-family: 'Heebo', sans-serif; font-size: 13px; font-weight: 500;
+      padding: 8px 18px; border-radius: var(--radius-pill);
+      transition: background var(--transition), transform var(--transition);
+    }
+    .add-to-cart-btn:hover { background: #c48888; transform: scale(.97); }
+
+    /* ── Promo Banner ── */
+    .section-promo {
+      margin-block: 0;
+      background: linear-gradient(135deg, var(--blush) 0%, #edddd8 40%, #e8f0e4 100%);
+      padding-block: 64px;
+    }
+    .promo-inner { text-align: center; max-width: 600px; margin-inline: auto; }
+    .promo-eyebrow {
+      font-size: 12px; font-weight: 500; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--dusty-rose); margin-bottom: 14px;
+    }
+    .promo-title {
+      font-family: 'Cormorant Garamond', serif; font-size: 38px; font-weight: 300;
+      line-height: 1.2; color: var(--charcoal); margin-bottom: 14px;
+    }
+    .promo-title em { font-style: italic; color: #9e6e6e; }
+    .promo-text { color: #7a6f6f; font-size: 16px; margin-bottom: 32px; }
+
+    /* ── About Teaser ── */
+    .section-about { padding-block: 80px; background: var(--white); }
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+    .about-img-wrap {
+      aspect-ratio: 4/5; border-radius: var(--radius-lg);
+      overflow: hidden; position: relative;
+      background: linear-gradient(160deg, #e8d4d0 0%, #d4bfba 50%, #c9b0aa 100%);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .about-img-wrap::after {
+      content: ''; position: absolute;
+      inset: 16px -16px -16px 16px;
+      border: 1.5px solid var(--sage); border-radius: var(--radius-lg);
+      z-index: -1;
+    }
+    .about-img-icon { font-size: 100px; opacity: .35; }
+    .about-eyebrow {
+      font-size: 12px; font-weight: 500; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--sage); margin-bottom: 14px;
+    }
+    .about-title {
+      font-family: 'Cormorant Garamond', serif; font-size: 38px; font-weight: 300;
+      line-height: 1.2; color: var(--charcoal); margin-bottom: 20px;
+    }
+    .about-text { color: #6b5e5e; font-size: 16px; line-height: 1.75; margin-bottom: 32px; }
+
+    /* ── Testimonials ── */
+    .section-testimonials { padding-block: 80px; }
+    .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .testimonial-card {
+      background: var(--white); border-radius: var(--radius-md);
+      padding: 32px 28px; box-shadow: var(--shadow-card);
+      position: relative;
+    }
+    .testimonial-card::before {
+      content: '"'; font-family: 'Cormorant Garamond', serif;
+      font-size: 80px; line-height: 1; color: var(--blush);
+      position: absolute; top: 16px; right: 24px; opacity: .6;
+    }
+    .stars { display: flex; gap: 3px; margin-bottom: 16px; direction: ltr; justify-content: flex-end; }
+    .stars span { color: var(--gold); font-size: 16px; }
+    .testimonial-text { font-size: 15px; color: #6b5e5e; line-height: 1.7; margin-bottom: 20px; font-style: italic; }
+    .testimonial-author { display: flex; align-items: center; gap: 12px; }
+    .author-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--blush); display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .author-name { font-weight: 600; font-size: 14px; }
+    .author-location { font-size: 12px; color: #9e8e8e; }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--charcoal); color: rgba(255,255,255,.75);
+      padding-block: 56px 24px;
+    }
+    .footer-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px; margin-bottom: 48px;
+    }
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px; font-weight: 300; color: var(--white);
+      margin-bottom: 14px;
+    }
+    .footer-logo span { color: var(--dusty-rose); }
+    .footer-tagline { font-size: 14px; line-height: 1.6; margin-bottom: 24px; }
+    .footer-social { display: flex; gap: 12px; }
+    .social-btn {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; transition: border-color var(--transition), background var(--transition);
+    }
+    .social-btn:hover { border-color: var(--dusty-rose); background: rgba(212,160,160,.15); }
+    .footer-col-title {
+      font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 400;
+      color: var(--white); margin-bottom: 20px;
+    }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a { font-size: 14px; transition: color var(--transition); }
+    .footer-links a:hover { color: var(--dusty-rose); }
+    .footer-contact-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; font-size: 14px; }
+    .footer-contact-item svg { width: 16px; height: 16px; stroke: var(--sage); fill: none; stroke-width: 1.5; flex-shrink: 0; margin-top: 2px; }
+    .whatsapp-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #25D366; color: var(--white);
+      font-family: 'Heebo', sans-serif; font-size: 14px; font-weight: 500;
+      padding: 10px 20px; border-radius: var(--radius-pill); margin-top: 16px;
+      transition: background var(--transition);
+    }
+    .whatsapp-btn:hover { background: #1ebe5a; }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,.1);
+      padding-top: 24px; display: flex; justify-content: space-between;
+      align-items: center; font-size: 13px;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 1024px) {
+      .products-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+    }
+    @media (max-width: 768px) {
+      .navbar-nav, .navbar-actions .cart-btn-text { display: none; }
+      .hamburger { display: flex; }
+      .categories-grid { grid-template-columns: 1fr; }
+      .products-grid { grid-template-columns: repeat(2, 1fr); }
+      .about-grid { grid-template-columns: 1fr; }
+      .about-img-wrap { max-width: 360px; margin-inline: auto; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+      .hero-content { padding-block: 60px; }
+    }
+    @media (max-width: 480px) {
+      .products-grid { grid-template-columns: 1fr; }
+      .hero-title { font-size: 38px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ NAVBAR ═══ -->
+  <header>
+    <nav class="navbar">
+      <div class="container">
+        <!-- Logo (right in RTL) -->
+        <a href="./index.html" class="navbar-logo">Oksana <span>Flowers</span></a>
+
+        <!-- Nav links -->
+        <ul class="navbar-nav">
+          <li><a href="./index.html">ראשי</a></li>
+          <li><a href="./shop.html">חנות</a></li>
+          <li><a href="./bridal.html">זרי כלה</a></li>
+          <li><a href="./about.html">אודות</a></li>
+          <li><a href="./contact.html">צור קשר</a></li>
+        </ul>
+
+        <!-- Actions (left in RTL) -->
+        <div class="navbar-actions">
+          <a href="./cart.html" class="cart-btn" aria-label="עגלת קניות">
+            <svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            <span class="cart-badge">0</span>
+          </a>
+          <button class="hamburger" aria-label="תפריט">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ═══ HERO ═══ -->
+    <section class="hero">
+      <div class="hero-bg-pattern"></div>
+      <div class="hero-florals"></div>
+      <div class="container">
+        <div class="hero-content">
+          <p class="hero-eyebrow">✦ נוף הגליל · מרכז רסקו ✦</p>
+          <h1 class="hero-title">
+            פרחים<br>
+            ש<em>מספרים</em><br>
+            סיפור
+          </h1>
+          <p class="hero-sub">זרים יוקרתיים המעוצבים בידי אוקסנה — לכל רגע מיוחד בחייכם</p>
+          <div class="hero-cta">
+            <a href="./shop.html" class="btn-primary">
+              לחנות
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+            </a>
+            <a href="./bridal.html" class="btn-secondary">זרי כלה</a>
+          </div>
+        </div>
+      </div>
+      <div class="hero-scroll">
+        <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+      </div>
+    </section>
+
+    <!-- ═══ CATEGORIES ═══ -->
+    <section class="section-categories">
+      <div class="container">
+        <h2 class="section-title">הקולקציות שלנו</h2>
+        <p class="section-subtitle">בחרו מתוך מגוון יצירות פרחוניות מרהיבות</p>
+        <div class="categories-grid">
+
+          <a href="./shop.html" class="category-card">
+            <div class="category-img category-img-bouquet">
+              <span class="category-img-icon">💐</span>
+              <span class="category-badge">210–770 ₪</span>
+            </div>
+            <div class="category-body">
+              <h3 class="category-name">זרי יוקרה</h3>
+              <p class="category-desc">זרים בוטניים מעוצבים בקפידה מפרחים עונתיים נבחרים — מתנה מושלמת לכל אירוע</p>
+              <span class="category-link">
+                לקולקציה
+                <svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
+              </span>
+            </div>
+          </a>
+
+          <a href="./bridal.html" class="category-card">
+            <div class="category-img category-img-bridal">
+              <span class="category-img-icon">👰</span>
+              <span class="category-badge">350–770 ₪</span>
+            </div>
+            <div class="category-body">
+              <h3 class="category-name">זרי כלה</h3>
+              <p class="category-desc">זרי כלה רומנטיים ומרגשים — כל אחד עשוי אישית עם ייעוץ אישי חינם</p>
+              <span class="category-link">
+                לקולקציה
+                <svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
+              </span>
+            </div>
+          </a>
+
+          <a href="./shop.html?cat=car" class="category-card">
+            <div class="category-img category-img-car">
+              <span class="category-img-icon">🚗</span>
+              <span class="category-badge">210–450 ₪</span>
+            </div>
+            <div class="category-body">
+              <h3 class="category-name">קישוטי מכוניות</h3>
+              <p class="category-desc">קישוטים פרחוניים אלגנטיים למכוניות חתן וכלה — מרהיבים ועמידים לאורך כל היום</p>
+              <span class="category-link">
+                לקולקציה
+                <svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
+              </span>
+            </div>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ BESTSELLERS ═══ -->
+    <section class="section-bestsellers">
+      <div class="container">
+        <h2 class="section-title">הנמכרים ביותר</h2>
+        <p class="section-subtitle">הזרים האהובים של לקוחותינו</p>
+        <div class="products-grid">
+
+          <div class="product-card">
+            <div class="product-img product-img-p1">
+              <span class="product-img-icon">🌹</span>
+              <span class="product-tag">פופולרי</span>
+            </div>
+            <div class="product-body">
+              <h3 class="product-name">זר ורדים רומנטי</h3>
+              <p class="product-desc">25 ורדים אדומים עם גרינרי בוטני</p>
+              <div class="product-footer">
+                <span class="product-price">320 ₪</span>
+                <button class="add-to-cart-btn">הוסף לסל</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="product-card">
+            <div class="product-img product-img-p2">
+              <span class="product-img-icon">🌸</span>
+              <span class="product-tag">חדש</span>
+            </div>
+            <div class="product-body">
+              <h3 class="product-name">קולקציית פסטל</h3>
+              <p class="product-desc">שילוב של פיוניות, ציפורן ואקליפטוס</p>
+              <div class="product-footer">
+                <span class="product-price">450 ₪</span>
+                <button class="add-to-cart-btn">הוסף לסל</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="product-card">
+            <div class="product-img product-img-p3">
+              <span class="product-img-icon">🌿</span>
+            </div>
+            <div class="product-body">
+              <h3 class="product-name">גן ירוק מינימליסטי</h3>
+              <p class="product-desc">ירק טרי, עשבי תיבול ופרחי בר</p>
+              <div class="product-footer">
+                <span class="product-price">280 ₪</span>
+                <button class="add-to-cart-btn">הוסף לסל</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="product-card">
+            <div class="product-img product-img-p4">
+              <span class="product-img-icon">🌷</span>
+              <span class="product-tag">מומלץ</span>
+            </div>
+            <div class="product-body">
+              <h3 class="product-name">מארז מתנה יוקרתי</h3>
+              <p class="product-desc">זר + שוקולד בלגי + כרטיס ברכה</p>
+              <div class="product-footer">
+                <span class="product-price">550 ₪</span>
+                <button class="add-to-cart-btn">הוסף לסל</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ PROMO BANNER ═══ -->
+    <section class="section-promo">
+      <div class="container">
+        <div class="promo-inner">
+          <p class="promo-eyebrow">✦ מבצע מיוחד ✦</p>
+          <h2 class="promo-title">שולחים <em>אהבה</em><br>עד הבית</h2>
+          <p class="promo-text">משלוח חינם לנוף הגליל וסביבתה בהזמנות מעל 350 ₪.<br>ניתן להזמין עד שעה לפני האירוע.</p>
+          <a href="./shop.html" class="btn-primary">להזמנה עכשיו</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ ABOUT TEASER ═══ -->
+    <section class="section-about">
+      <div class="container">
+        <div class="about-grid">
+          <div class="about-img-wrap">
+            <span class="about-img-icon">🌺</span>
+          </div>
+          <div class="about-text-col">
+            <p class="about-eyebrow">✦ הסיפור שלנו ✦</p>
+            <h2 class="about-title">יצירה מתוך<br>אהבה לפרחים</h2>
+            <p class="about-text">
+              אני אוקסנה — מעצבת פרחים עם למעלה מ-15 שנות ניסיון ביצירת רגעים בלתי נשכחים.
+              כל זר שאני יוצרת נולד מדיאלוג אמיתי עם הלקוח, מחומרים טריים הנבחרים בוקר בוקר מהשוק,
+              ומידיים שמכניסות לכל פרח את הלב.
+            </p>
+            <p class="about-text">
+              הסטודיו שלי בנוף הגליל הוא מקום שבו בוטניקה פוגשת אמנות —
+              ואתם מוזמנים להגיע, להתייעץ ולגלות את הפרח שמספר את הסיפור שלכם.
+            </p>
+            <a href="./about.html" class="btn-secondary">קצת עלינו</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ TESTIMONIALS ═══ -->
+    <section class="section-testimonials">
+      <div class="container">
+        <h2 class="section-title">לקוחות מספרים</h2>
+        <p class="section-subtitle">השמחה שלכם היא ההשראה שלנו</p>
+        <div class="testimonials-grid">
+
+          <div class="testimonial-card">
+            <div class="stars">
+              <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+            </div>
+            <p class="testimonial-text">"זר הכלה שעיצבה אוקסנה היה פשוט מדהים. בדיוק מה שחלמתי עליו — פסטל עדין, רומנטי ובוטני. כל האורחים שאלו מי עשה את הזר!"</p>
+            <div class="testimonial-author">
+              <div class="author-avatar">🌸</div>
+              <div>
+                <div class="author-name">מיכל לוי</div>
+                <div class="author-location">נוף הגליל</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <div class="stars">
+              <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+            </div>
+            <p class="testimonial-text">"הזמנתי מארז מתנה לאמא שלי ליום הולדת. הגיע עם שוקולד ופרחים מרהיבים. היא בכתה מרוב שמחה. תודה אוקסנה על המקצועיות!"</p>
+            <div class="testimonial-author">
+              <div class="author-avatar">🌷</div>
+              <div>
+                <div class="author-name">דניאל כהן</div>
+                <div class="author-location">כרמיאל</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <div class="stars">
+              <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+            </div>
+            <p class="testimonial-text">"קישוטי המכונית ליום החתונה היו יצירת אמנות. שמרו כל היום ונראו כאילו יצאו זה עתה מהסטודיו. ממליץ בחום לכל מי שרוצה את הטוב ביותר."</p>
+            <div class="testimonial-author">
+              <div class="author-avatar">🌿</div>
+              <div>
+                <div class="author-name">יוסי ורד</div>
+                <div class="author-location">עכו</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+
+        <div>
+          <div class="footer-logo">Oksana <span>Flowers</span></div>
+          <p class="footer-tagline">פרחים יוקרתיים המעוצבים בידיים אוהבות —<br>לכל רגע שראוי להיזכר.</p>
+          <div class="footer-social">
+            <a href="#" class="social-btn" aria-label="אינסטגרם">📷</a>
+            <a href="#" class="social-btn" aria-label="פייסבוק">👍</a>
+            <a href="#" class="social-btn" aria-label="טיקטוק">🎵</a>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">ניווט</h4>
+          <ul class="footer-links">
+            <li><a href="./index.html">ראשי</a></li>
+            <li><a href="./shop.html">חנות</a></li>
+            <li><a href="./bridal.html">זרי כלה</a></li>
+            <li><a href="./about.html">אודות</a></li>
+            <li><a href="./contact.html">צור קשר</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">קטגוריות</h4>
+          <ul class="footer-links">
+            <li><a href="./shop.html">זרי יוקרה</a></li>
+            <li><a href="./bridal.html">זרי כלה</a></li>
+            <li><a href="./shop.html?cat=car">קישוטי מכוניות</a></li>
+            <li><a href="./shop.html?cat=gift">מארזי מתנה</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">צור קשר</h4>
+          <div class="footer-contact-item">
+            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span>מרכז רסקו, נוף הגליל</span>
+          </div>
+          <div class="footer-contact-item">
+            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.18 6.18l1.89-1.89a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <span>050-XXX-XXXX</span>
+          </div>
+          <div class="footer-contact-item">
+            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span>א'–ו' 09:00–19:00 | שבת סגור</span>
+          </div>
+          <a href="https://wa.me/972500000000" class="whatsapp-btn">
+            💬 הזמנה בוואטסאפ
+          </a>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2026 Oksana Flowers. כל הזכויות שמורות.</span>
+        <span>עוצב באהבה בנוף הגליל 🌸</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Cart count from localStorage
+    function updateCartBadge() {
+      const cart = JSON.parse(localStorage.getItem('oksana-cart') || '[]');
+      const count = cart.reduce((s, i) => s + (i.qty || 1), 0);
+      document.querySelector('.cart-badge').textContent = count;
+    }
+
+    // Add to cart buttons
+    document.querySelectorAll('.add-to-cart-btn').forEach((btn, i) => {
+      const products = [
+        { id: 'p1', name: 'זר ורדים רומנטי', price: 320 },
+        { id: 'p2', name: 'קולקציית פסטל', price: 450 },
+        { id: 'p3', name: 'גן ירוק מינימליסטי', price: 280 },
+        { id: 'p4', name: 'מארז מתנה יוקרתי', price: 550 },
+      ];
+      btn.addEventListener('click', () => {
+        const cart = JSON.parse(localStorage.getItem('oksana-cart') || '[]');
+        const p = products[i];
+        const existing = cart.find(item => item.id === p.id);
+        if (existing) existing.qty = (existing.qty || 1) + 1;
+        else cart.push({ ...p, qty: 1 });
+        localStorage.setItem('oksana-cart', JSON.stringify(cart));
+        updateCartBadge();
+        btn.textContent = '✓ נוסף!';
+        btn.style.background = '#7ab87a';
+        setTimeout(() => { btn.textContent = 'הוסף לסל'; btn.style.background = ''; }, 1600);
+      });
+    });
+
+    updateCartBadge();
+  </script>
+
+</body>
+</html>
